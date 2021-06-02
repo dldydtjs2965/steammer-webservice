@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Date;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,16 +33,23 @@ public class GamesRepositoryTest {
                 .distributor("test-dis")
                 .build();
 
-        Games save = gamesRepository.save(game);
+        gamesRepository.save(game);
 
 
         Optional<Games> gamesList = gamesRepository.findById(Long.valueOf("12345"));
 
          //게임 테스트 데이터 확인
-        Games games =  gamesList.get();
+        Games games =  gamesList.orElse(null);
 
+        assert games != null;
         assertThat(games.getGameId()).isEqualTo(Long.valueOf("12345"));
         assertThat(games.getGameName()).isEqualTo("test_name");
+        assertThat(games.getGameInfo()).isEqualTo("test_info");
+        assertThat(games.getLaunchDate()).isEqualTo(Date.valueOf("2021-05-05"));
+        assertThat(games.getImgUrl()).isEqualTo("test_url");
+        assertThat(games.getVideoUrl()).isEqualTo("test-url");
+        assertThat(games.getDevCompany()).isEqualTo("test-company");
+        assertThat(games.getDistributor()).isEqualTo("test-dis");
     }
 
 //    @Test
