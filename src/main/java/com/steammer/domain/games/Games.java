@@ -1,4 +1,4 @@
-package com.steammer.domain.posts.Posts;
+package com.steammer.domain.games;
 
 import lombok.Builder;
 import lombok.Getter;

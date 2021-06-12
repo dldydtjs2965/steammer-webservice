@@ -1,7 +1,7 @@
-package com.steammer.domain.posts;
+package com.steammer.domain;
 
-import com.steammer.domain.posts.Posts.Games;
-import com.steammer.domain.posts.Posts.GamesRepository;
+import com.steammer.domain.games.Games;
+import com.steammer.domain.games.GamesRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
