@@ -1,14 +1,14 @@
 package com.steammer.domain.games;
 
+import com.steammer.domain.GameTags;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -42,6 +42,9 @@ public class Games {
 
     @Column(name = "DISTRIBUTOR")
     private String distributor;
+
+    @OneToMany(mappedBy = "games")
+    private List<GameTags> gameTags = new ArrayList<>();
 
     @Builder
     public Games(Long gameId, String gameName, String gameInfo, Date launchDate, String evaluation, String imgUrl, String videoUrl, String devCompany, String distributor) {
