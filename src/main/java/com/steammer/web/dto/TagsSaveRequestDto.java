@@ -1,6 +1,6 @@
 package com.steammer.web.dto;
 
-import com.steammer.domain.tags.Tags;
+import com.steammer.domain.tags.Tag;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class TagsSaveRequestDto {
+
+    private Long gameTagId;
+
     private Long tagId;
+
     private String tagName;
 
     @Builder
@@ -17,8 +21,8 @@ public class TagsSaveRequestDto {
         this.tagName = tagName;
     }
 
-    public Tags toEntity() {
-        return Tags.builder()
+    public Tag toEntity() {
+        return Tag.builder()
                 .tagId(tagId)
                 .tagName(tagName)
                 .build();

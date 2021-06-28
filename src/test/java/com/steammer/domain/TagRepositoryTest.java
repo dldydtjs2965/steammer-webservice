@@ -1,7 +1,7 @@
 package com.steammer.domain;
 
-import com.steammer.domain.tags.Tags;
-import com.steammer.domain.tags.TagsRepository;
+import com.steammer.domain.tags.Tag;
+import com.steammer.domain.tags.TagRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,23 +17,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TagRepositoryTest {
 
     @Autowired
-    TagsRepository tagsRepository;
+    TagRepository tagRepository;
 
     @Test
     public void create() {
-        Tags tag = Tags.builder()
-                .tagId(Long.valueOf(00000))
+        //given
+        Tag tag = Tag.builder()
+                .tagId(Long.valueOf(0))
                 .tagName("testTag")
                 .build();
+        //when
+        tagRepository.save(tag);
 
-        tagsRepository.save(tag);
+        //then
+        Optional<Tag> tagList = tagRepository.findById(Long.valueOf(00000));
 
-        Optional<Tags> tagList = tagsRepository.findById(Long.valueOf(00000));
+        Tag tagsTest = tagList.orElse(null);
 
-        Tags tags = tagList.orElse(null);
-
-        assert tags != null;
-        assertThat(tags.getTagId()).isEqualTo(Long.valueOf(00000));
-        assertThat(tags.getTagName()).isEqualTo("testTag");
+        assert tagsTest != null;
+        assertThat(tagsTest.getTagId()).isEqualTo(Long.valueOf(00000));
+        assertThat(tagsTest.getTagName()).isEqualTo("testTag");
     }
 }

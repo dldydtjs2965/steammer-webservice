@@ -1,7 +1,7 @@
 package com.steammer.domain;
 
-import com.steammer.domain.games.Games;
-import com.steammer.domain.games.GamesRepository;
+import com.steammer.domain.games.Game;
+import com.steammer.domain.games.GameRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +15,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class GamesRepositoryTest {
+public class GameRepositoryTest {
 
     @Autowired
-    GamesRepository gamesRepository;
+    GameRepository gameRepository;
 
     @Test
     public void create() {
-        Games game = Games.builder()
+
+        //given
+        Game game = Game.builder()
                 .gameId(Long.valueOf("12345"))
                 .gameName("test_name")
                 .gameInfo("test_info")
@@ -32,14 +34,14 @@ public class GamesRepositoryTest {
                 .devCompany("test-company")
                 .distributor("test-dis")
                 .build();
+        //when
+        gameRepository.save(game);
 
-        gamesRepository.save(game);
-
-
-        Optional<Games> gamesList = gamesRepository.findById(Long.valueOf("12345"));
+        //then
+        Optional<Game> gamesList = gameRepository.findById(Long.valueOf("12345"));
 
          //게임 테스트 데이터 확인
-        Games games =  gamesList.orElse(null);
+        Game games =  gamesList.orElse(null);
 
         assert games != null;
         assertThat(games.getGameId()).isEqualTo(Long.valueOf("12345"));

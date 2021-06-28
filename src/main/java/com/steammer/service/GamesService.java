@@ -1,39 +1,21 @@
 package com.steammer.service;
 
-import com.steammer.domain.GameTags;
-import com.steammer.domain.GameTagsRepository;
-import com.steammer.domain.games.GamesRepository;
-import com.steammer.domain.tags.TagsRepository;
-import com.steammer.web.dto.GameTagsSaveRequestDto;
+import com.steammer.domain.gameTag.GameTagRepository;
+import com.steammer.domain.games.GameRepository;
+import com.steammer.domain.tags.TagRepository;
 import com.steammer.web.dto.GamesSaveRequestDto;
-import com.steammer.web.dto.TagsSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Service
 public class GamesService {
-    private final GamesRepository gamesRepository;
-    private final TagsRepository tagsRepository;
-    private final GameTagsRepository gameTagsRepository;
+    private final GameRepository gameRepository;
+    private final TagRepository tagRepository;
+    private final GameTagRepository gameTagRepository;
     @Transactional
-    public Long gameSave(GamesSaveRequestDto gamesRequestDto, List<TagsSaveRequestDto> tagsRequestDtoList){
-        Long gameId = gamesRepository.save(gamesRequestDto.toEntity()).getGameId();
-
-        for(TagsSaveRequestDto tagsSaveRequestDto: tagsRequestDtoList){
-            GameTags gameTags = GameTagsSaveRequestDto.builder()
-                    .gameId(gameId)
-                    .tagId(tagsSaveRequestDto.getTagId())
-                    .build().toEntity();
-
-            tagsRepository.save(tagsSaveRequestDto.toEntity());
-
-            gameTagsRepository.save(gameTags);
-        }
-
-        return gameId;
+    public Long gameSave(GamesSaveRequestDto gamesRequestDto){
+        return gameRepository.save(gamesRequestDto.toEntity()).getGameId();
     }
 }

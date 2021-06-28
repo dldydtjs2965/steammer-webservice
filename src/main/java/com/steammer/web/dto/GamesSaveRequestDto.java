@@ -1,6 +1,6 @@
 package com.steammer.web.dto;
 
-import com.steammer.domain.games.Games;
+import com.steammer.domain.games.Game;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +29,7 @@ public class GamesSaveRequestDto {
 
     private String distributor;
 
+
     @Builder
     public GamesSaveRequestDto(Long gameId, String gameName, String gameInfo, Date launchDate, String evaluation, String imgUrl, String videoUrl, String devCompany, String distributor) {
         this.gameId = gameId;
@@ -42,8 +43,8 @@ public class GamesSaveRequestDto {
         this.distributor = distributor;
     }
 
-    public Games toEntity() {
-        return Games.builder()
+    public Game toEntity() {
+        return Game.builder()
                 .gameId(gameId)
                 .gameName(gameName)
                 .gameInfo(gameInfo)

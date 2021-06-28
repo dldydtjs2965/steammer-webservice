@@ -1,6 +1,6 @@
 package com.steammer.domain.tags;
 
-import com.steammer.domain.GameTags;
+import com.steammer.domain.gameTag.GameTag;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "TAGS")
 @NoArgsConstructor
-public class Tags {
+public class Tag {
     // 태그 ID
     @Id
     @Column(name = "TAG_ID")
@@ -21,12 +21,9 @@ public class Tags {
     // 태그 이름
     @Column(name = "TAG_NAME")
     private String tagName;
-    //  join 테이블
-    @OneToMany(mappedBy = "tags")
-    private List<GameTags> gameTags = new ArrayList<>();
 
     @Builder
-    public Tags(Long tagId, String tagName) {
+    public Tag(Long tagId, String tagName) {
         this.tagId = tagId;
         this.tagName = tagName;
     }

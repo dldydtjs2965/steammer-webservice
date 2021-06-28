@@ -1,6 +1,8 @@
 package com.steammer.web.dto;
 
-import com.steammer.domain.GameTags;
+import com.steammer.domain.gameTag.GameTag;
+import com.steammer.domain.games.Game;
+import com.steammer.domain.tags.Tag;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,22 +13,22 @@ public class GameTagsSaveRequestDto {
 
     private Long gameTagKey;
 
-    private Long gameId;
+    private Game game;
 
-    private Long tagId;
+    private Tag tag;
 
     @Builder
-    public GameTagsSaveRequestDto(Long gameId,Long tagId){
-        this.gameTagKey = gameId + tagId;
-        this.gameId = gameId;
-        this.tagId = gameId;
+    public GameTagsSaveRequestDto(Long gameTagKey,Game game,Tag tag){
+        this.gameTagKey = gameTagKey;
+        this.game = game;
+        this.tag = tag;
     }
 
-    public GameTags toEntity() {
-        return GameTags.builder()
+    public GameTag toEntity() {
+        return GameTag.builder()
                 .gameTagKey(gameTagKey)
-                .gameId(gameId)
-                .tagId(tagId)
+                .game(game)
+                .tag(tag)
                 .build();
     }
 }

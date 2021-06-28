@@ -16,8 +16,8 @@ public class GamesApiController {
     private final GamesService gamesService;
 
     @PostMapping("/api/v1/games")
-    public Long save(@RequestBody GamesSaveRequestDto requestDto, @RequestBody List<TagsSaveRequestDto> tagsSaveRequestDtoList){
+    public Long save(@RequestBody GamesSaveRequestDto requestDto){
 
-        return gamesService.gameSave(requestDto, tagsSaveRequestDtoList);
+        return gamesService.gameSave(requestDto);
     }
 }
