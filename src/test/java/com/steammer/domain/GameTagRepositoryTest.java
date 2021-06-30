@@ -34,10 +34,6 @@ public class GameTagRepositoryTest {
     TagRepository tagRepository;
 
 
-    @Before
-    public void 게임태그데이터준비() {
-
-    }
     @Test
     public void 저장() {
         //given
@@ -55,6 +51,7 @@ public class GameTagRepositoryTest {
                 .tag(testTag)
                 .build();
         //when
+        System.out.println("game_tag_key = "+gameTag.getGameTagKey());
         gameTagRepository.save(gameTag);
 
         //then
@@ -62,9 +59,9 @@ public class GameTagRepositoryTest {
 
         GameTag testGameTag = gameTagList.get(0);
 
-        assertThat(testGameTag.getGame()).isEqualTo(game);
+        assertThat(testGameTag.getGame().getGameId()).isEqualTo(testGame.getGameId());
 
-        assertThat(testGameTag.getTag()).isEqualTo(tag);
+        assertThat(testGameTag.getTag().getTagId()).isEqualTo(testTag.getTagId());
 
 
     }

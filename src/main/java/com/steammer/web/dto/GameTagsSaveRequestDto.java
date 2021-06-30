@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 public class GameTagsSaveRequestDto {
@@ -17,6 +20,8 @@ public class GameTagsSaveRequestDto {
 
     private Tag tag;
 
+    private List<Tag> tags = new ArrayList<>();
+
     @Builder
     public GameTagsSaveRequestDto(Long gameTagKey,Game game,Tag tag){
         this.gameTagKey = gameTagKey;
@@ -24,9 +29,8 @@ public class GameTagsSaveRequestDto {
         this.tag = tag;
     }
 
-    public GameTag toEntity() {
+    public GameTag toEntity(Game game,Tag tag) {
         return GameTag.builder()
-                .gameTagKey(gameTagKey)
                 .game(game)
                 .tag(tag)
                 .build();

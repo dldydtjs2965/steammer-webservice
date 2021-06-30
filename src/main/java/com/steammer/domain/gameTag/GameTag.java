@@ -30,8 +30,7 @@ public class GameTag {
     private Tag tag;
 
     @Builder
-    public GameTag(Long gameTagKey, Game game, Tag tag){
-        this.gameTagKey = gameTagKey;
+    public GameTag(Game game, Tag tag){
         this.game = game;
         this.tag  = tag;
     }
