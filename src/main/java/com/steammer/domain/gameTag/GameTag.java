@@ -16,7 +16,6 @@ public class GameTag {
     //게임 태그 키
     @Id
     @Column(name="GAME_TAG_KEY")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gameTagKey;
 
     // 게임 ID

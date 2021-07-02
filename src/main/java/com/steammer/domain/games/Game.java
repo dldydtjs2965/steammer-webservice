@@ -1,5 +1,7 @@
 package com.steammer.domain.games;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.steammer.domain.gameTag.GameTag;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +16,8 @@ import java.util.List;
 @Entity
 @Table(name = "GAMES")
 @NoArgsConstructor
+//stack overflow 방지
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Game {
 
     // 게임 아이디(PK)
@@ -44,6 +48,9 @@ public class Game {
     //게임 배급사
     @Column(name = "DISTRIBUTOR")
     private String distributor;
+
+    @OneToMany(mappedBy = "game")
+    private List<GameTag> gameTags = new ArrayList<>();
 
     @Builder
     public Game(Long gameId, String gameName, String gameInfo, Date launchDate, String evaluation, String imgUrl, String videoUrl, String devCompany, String distributor) {

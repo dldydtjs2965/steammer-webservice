@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.Optional;
@@ -25,7 +26,7 @@ public class GameRepositoryTest {
 
         //given
         Game game = Game.builder()
-                .gameId(Long.valueOf("12345"))
+                .gameId(Long.valueOf("123456"))
                 .gameName("test_name")
                 .gameInfo("test_info")
                 .launchDate(Date.valueOf("2021-05-05"))
