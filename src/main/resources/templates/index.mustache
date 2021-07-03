@@ -22,28 +22,56 @@
         }
 
         .container {
-            padding-left: 50px;
+            padding-left: 30px;
         }
 
         .wrap {
-            width: 900px;
+            width: 80%;
             margin: auto;
         }
 
         .card{
-            background-color: #acdbf5;
+            background-color: #202020;
+            display: flex;
+        }
+
+        .card-body{
+            color: #67c1f5;
+        }
+
+        .card-title{
+            color: gray;
+        }
+
+        .card .tag-box{
+            float: left;
+            margin-left: 15px;
+            margin-right: 15px;
+            margin-bottom: 10px;
+        }
+
+        .card-sub-body{
+            font-size: 12px;
+            font-family: Arial;
+        }
+
+        .tag-box #game-tag{
+            margin:3px;
+        }
+
+        #dev-company,#distributor,#review,#launch-date{
+            float:left;
         }
 
         .header{
             background-color: #171a21;
             min-width: 940px;
         }
+
+        p.card-text{
+            font-size: 12px;
+        }
     </style>
-    <script>
-        $( document ).ready(function() {
-            console.log( {games} );
-        });
-    </script>
 </head>
 <body>
 <div class="header">
@@ -52,30 +80,69 @@
 <div class="wrap">
     <div class="container">
         <div class="card-deck">
+            {{#games}}
+                <div class="card">
+                    <img class="card-img-top" src="{{imgUrl}}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{gameName}}</h5>
+                        <p class="card-text">{{gameInfo}}.</p>
+                        <div class="card-sub-body">
+                            <div class="summary column" id="launch-date">출시날짜:</div>
+                            <div class="summary column">
+                                <span class="game_review_summary mixed" style="margin-left: 20px">{{launchDate}}</span>
+                            </div>
+                            <div class="subtitle column all" id="review">모든 평가:</div>
+                            <div class="summary column">
+                                <span class="game_review_summary mixed" style="margin-left: 20px">{{evaluation}}</span>
+                            </div>
+                            <div class="dev_row">
+                                <div class="subtitle column" id="dev-company">개발자:</div>
+                                <span class="column" id="developers_list" style="margin-left: 20px">{{devCompany}}</span>
+                                <div class="dev_row">
+                                    <div class="subtitle column" id="distributor" >배급사:</div>
+                                    <span class="column" style="margin-left: 20px">{{distributor}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "tag-box">
+                        {{#gameTags}}
+                            <a class="btn btn-secondary btn-sm" href="#" role="button" id="{{tag.tagId}}">{{tag.tagName}}</a>
+                        {{/gameTags}}
+                    </div>
+                </div>
+            {{/games}}
             <div class="card">
                 <img class="card-img-top" src="https://cdn.cloudflare.steamstatic.com/steam/apps/848450/header.jpg?t=1620980478" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">Card title</h5>
                     <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional
                         content. This content is a little bit longer.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                    <div class="card-sub-body">
+                        <div class="summary column" id="launch-date">출시날짜:</div>
+                        <div class="summary column">
+                            <span class="game_review_summary mixed" style="margin-left: 20px">2021-07-03</span>
+                        </div>
+                        <div class="subtitle column all" id="review">모든 평가:</div>
+                        <div class="summary column">
+                            <span class="game_review_summary mixed" style="margin-left: 20px">복합적</span>
+                        </div>
+                        <div class="dev_row">
+                            <div class="subtitle column" id="dev-company">개발자:</div>
+                            <span class="column" id="developers_list" style="margin-left: 20px">KRAFTON, Inc.</span>
+                            <div class="dev_row">
+                                <div class="subtitle column" id="distributor" >배급사:</div>
+                                <span class="column" style="margin-left: 20px">KRAFTON, Inc.</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="card">
-                <img class="card-img-top" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1328670/header.jpg?t=1621010887" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                </div>
-            </div>
-            <div class="card">
-                <img class="card-img-top" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1361680/header.jpg?t=1621080891" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
-                        content. This card has even longer content than the first to show that equal height action.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <div class = "tag-box">
+                    <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag">Link</a>
+                    <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag">Link</a>
+                    <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag">Link</a>
+                    <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag">Link</a>
+                    <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag">Link</a>
                 </div>
             </div>
         </div>
