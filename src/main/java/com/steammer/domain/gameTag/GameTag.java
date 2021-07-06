@@ -19,12 +19,12 @@ public class GameTag {
     private Long gameTagKey;
 
     // 게임 ID
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GAME_ID")
     private Game game;
 
     // tag ID
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TAG_ID")
     private Tag tag;
 
