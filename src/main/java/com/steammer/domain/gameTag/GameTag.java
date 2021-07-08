@@ -13,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "GAME_TAGS")
 public class GameTag {
+
     //게임 태그 키
     @Id
     @Column(name="GAME_TAG_KEY")

@@ -17,7 +17,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
     <style>
-        body{
+        body {
             background-color: #1b2838;
         }
 
@@ -30,45 +30,45 @@
             margin: auto;
         }
 
-        .card{
+        .card {
             background-color: #202020;
             display: flex;
         }
 
-        .card-body{
+        .card-body {
             color: #67c1f5;
         }
 
-        .card-title{
+        .card-title {
             color: gray;
         }
 
-        .card .tag-box{
+        .card .tag-box {
             float: left;
             margin-left: 15px;
             margin-right: 15px;
             margin-bottom: 10px;
         }
 
-        .card-sub-body{
+        .card-sub-body {
             font-size: 12px;
             font-family: Arial;
         }
 
-        .tag-box #game-tag{
-            margin:3px;
+        .tag-box #game-tag {
+            margin: 3px;
         }
 
-        #dev-company,#distributor,#review,#launch-date{
-            float:left;
+        #dev-company, #distributor, #review, #launch-date {
+            float: left;
         }
 
-        .header{
+        .header {
             background-color: #171a21;
             min-width: 940px;
         }
 
-        p.card-text{
+        p.card-text {
             font-size: 12px;
         }
     </style>
@@ -97,56 +97,23 @@
                             </div>
                             <div class="dev_row">
                                 <div class="subtitle column" id="dev-company">개발자:</div>
-                                <span class="column" id="developers_list" style="margin-left: 20px">{{devCompany}}</span>
+                                <span class="column" id="developers_list"
+                                      style="margin-left: 20px">{{devCompany}}</span>
                                 <div class="dev_row">
-                                    <div class="subtitle column" id="distributor" >배급사:</div>
+                                    <div class="subtitle column" id="distributor">배급사:</div>
                                     <span class="column" style="margin-left: 20px">{{distributor}}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class = "tag-box">
+                    <div class="tag-box">
                         {{#gameTags}}
-                            <a class="btn btn-secondary btn-sm" href="#" role="button" id="{{tag.tagId}}">{{tag.tagName}}</a>
+                            <a class="btn btn-secondary btn-sm" href="#" role="button" id="{{tagId}}">{{tagName}}</a>
                         {{/gameTags}}
                     </div>
                 </div>
             {{/games}}
-            <div class="card">
-                <img class="card-img-top" src="https://cdn.cloudflare.steamstatic.com/steam/apps/848450/header.jpg?t=1620980478" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional
-                        content. This content is a little bit longer.</p>
-                    <div class="card-sub-body">
-                        <div class="summary column" id="launch-date">출시날짜:</div>
-                        <div class="summary column">
-                            <span class="game_review_summary mixed" style="margin-left: 20px">2021-07-03</span>
-                        </div>
-                        <div class="subtitle column all" id="review">모든 평가:</div>
-                        <div class="summary column">
-                            <span class="game_review_summary mixed" style="margin-left: 20px">복합적</span>
-                        </div>
-                        <div class="dev_row">
-                            <div class="subtitle column" id="dev-company">개발자:</div>
-                            <span class="column" id="developers_list" style="margin-left: 20px">KRAFTON, Inc.</span>
-                            <div class="dev_row">
-                                <div class="subtitle column" id="distributor" >배급사:</div>
-                                <span class="column" style="margin-left: 20px">KRAFTON, Inc.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class = "tag-box">
-                    <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag">Link</a>
-                    <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag">Link</a>
-                    <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag">Link</a>
-                    <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag">Link</a>
-                    <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag">Link</a>
-                </div>
-            </div>
         </div>
     </div>
-</div>
 </body>
 </html>
