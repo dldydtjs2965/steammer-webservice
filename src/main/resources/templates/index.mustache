@@ -23,6 +23,7 @@
 
         .container {
             padding-left: 30px;
+            max-width: 80%;
         }
 
         .wrap {
@@ -30,10 +31,12 @@
             margin: auto;
         }
 
-        .card {
+        #card {
             background-color: #202020;
-            display: flex;
+            padding: 10px;
+            margin-bottom: 1%;
         }
+
 
         .card-body {
             color: #67c1f5;
@@ -43,11 +46,9 @@
             color: gray;
         }
 
-        .card .tag-box {
-            float: left;
-            margin-left: 15px;
-            margin-right: 15px;
-            margin-bottom: 10px;
+        #card .tag-box {
+            float: revert;
+            text-align: center;
         }
 
         .card-sub-body {
@@ -57,6 +58,10 @@
 
         .tag-box #game-tag {
             margin: 3px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 80px
         }
 
         #dev-company, #distributor, #review, #launch-date {
@@ -70,6 +75,11 @@
 
         p.card-text {
             font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* number of lines to show */
+            -webkit-box-orient: vertical;
         }
     </style>
 </head>
@@ -79,9 +89,9 @@
 </div>
 <div class="wrap">
     <div class="container">
-        <div class="card-deck">
+        <div class="row">
             {{#games}}
-                <div class="card">
+                <div class="col-xs-12 col-sm-6 col-md-4" id="card">
                     <img class="card-img-top" src="{{imgUrl}}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{gameName}}</h5>
@@ -108,12 +118,14 @@
                     </div>
                     <div class="tag-box">
                         {{#gameTags}}
-                            <a class="btn btn-secondary btn-sm" href="#" role="button" id="{{tagId}}">{{tagName}}</a>
+                            <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag" itemid="{{tagId}}">{{tagName}}</a>
                         {{/gameTags}}
+                        <a class="btn btn-secondary btn-sm" href="#" role="button" id="all-tag">+</a>
                     </div>
                 </div>
             {{/games}}
         </div>
     </div>
+</div>
 </body>
 </html>

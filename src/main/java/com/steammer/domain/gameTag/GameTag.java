@@ -25,7 +25,7 @@ public class GameTag {
     private Game game;
 
     // tag ID
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "TAG_ID")
     private Tag tag;
 

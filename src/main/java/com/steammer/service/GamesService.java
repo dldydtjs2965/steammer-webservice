@@ -1,9 +1,11 @@
 package com.steammer.service;
 
+import com.steammer.domain.games.Game;
 import com.steammer.domain.games.GameRepository;
-import com.steammer.web.dto.GamesListResponseDto;
+import com.steammer.web.dto.GameLimitTagListResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +20,9 @@ public class GamesService {
     private final GameRepository gameRepository;
 
     @Transactional(readOnly = true)
-    public List<GamesListResponseDto> findAllDesc() {
-        return gameRepository.findAllDesc().stream()
-                .map(GamesListResponseDto::new)
+    public List<GameLimitTagListResponseDto> findAllPaging(int firstIndex, int lastIndex) {
+        return gameRepository.findAll(PageRequest.of(firstIndex, lastIndex)).stream()
+                .map(GameLimitTagListResponseDto::new)
                 .collect(Collectors.toList());
     }
 }

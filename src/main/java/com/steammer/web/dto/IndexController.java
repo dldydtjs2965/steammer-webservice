@@ -14,7 +14,7 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(Model model){
-        model.addAttribute("games", gamesService.findAllDesc());
+        model.addAttribute("games", gamesService.findAllPaging(0,9));
         return "index";
     }
 }
