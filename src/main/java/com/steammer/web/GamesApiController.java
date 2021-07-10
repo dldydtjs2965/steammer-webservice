@@ -13,7 +13,7 @@ import java.util.List;
 public class GamesApiController {
     private final GamesService gamesService;
 
-    @GetMapping("api/v1/gamesAll")
+    @GetMapping("api/gamesAll")
     public List<GameLimitTagListResponseDto> gameResponseDtoList (){
         return gamesService.findAllPaging(0,19);
     }

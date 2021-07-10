@@ -6,12 +6,12 @@ import com.steammer.domain.tags.Tag;
 import lombok.Getter;
 
 @Getter
-public class GameTagsResponseDto {
+public class GameTagResponseDto {
     private long gameTagKey;
     private Game game;
     private Tag tag;
 
-    public GameTagsResponseDto(GameTag entity) {
+    public GameTagResponseDto(GameTag entity) {
         this.gameTagKey = entity.getGameTagKey();
         this.game = entity.getGame();
         this.tag = entity.getTag();
