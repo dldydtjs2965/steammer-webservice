@@ -75,8 +75,8 @@ public class GamesServiceTest extends TestCase {
         });
 
         //then
-        for (int i = 0; i>=gameTags.size()+1; i++) {
-            assertThat(testGameTags.get(i)).isEqualTo(gameTags.get(i));
+        for (int i = 0; i<gameTags.size(); i++) {
+            assertThat(testGameTags.get(i).getGameTagKey()).isEqualTo(gameTags.get(i).getGameTagKey());
         }
     }
 }

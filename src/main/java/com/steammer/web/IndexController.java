@@ -1,4 +1,4 @@
-package com.steammer.web.dto;
+package com.steammer.web;
 
 import com.steammer.service.GamesService;
 import lombok.RequiredArgsConstructor;

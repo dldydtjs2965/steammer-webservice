@@ -16,6 +16,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+    <!--Mustache js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
     <style>
         body {
             background-color: #1b2838;
@@ -84,11 +86,27 @@
     </style>
     <script>
         function getGameTag(gameId) {
+            $("#game-tag-list").empty()
             $.ajax({
                 type: "POST",
                 url: "/api/gameTagResponse",
-                data: gameId,
-                success: function(response)
+                data: {gameId: gameId},
+                dataType: "json",
+                success: function (response) {
+                    let gameTags = response['gameTags']
+                    console.log(response)
+                    for(let i = 0;i < gameTags.length; i++){
+                        let tagId = gameTags[i]['tag']['tagId']
+                        let tagName = gameTags[i]['tag']['tagName']
+
+                        let html = `<li class="list-group-item" itemid="${tagId}">${tagName}</li>`
+                        $("#game-tag-list").append(html);
+                    }
+
+                },
+                error: function () {
+                    alert("Game Tag POST Error")
+                }
             })
         }
     </script>
@@ -101,7 +119,7 @@
     <div class="container">
         <div class="row">
             {{#games}}
-                <div class="col-xs-12 col-sm-6 col-md-4" id="card">
+                <div class="col-xs-12 col-sm-6 col-md-4" id="{{gameId}}">
                     <img class="card-img-top" src="{{imgUrl}}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{gameName}}</h5>
@@ -128,9 +146,13 @@
                     </div>
                     <div class="tag-box">
                         {{#gameTags}}
-                            <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag" itemid="{{tagId}}">{{tagName}}</a>
+                            <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag"
+                               itemid="{{tagId}}">{{tagName}}</a>
                         {{/gameTags}}
-                        <a class="btn btn-secondary btn-sm" href="#" role="button" id="all-tag">+</a>
+                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                data-target="#exampleModal" onclick="getGameTag({{gameId}})">
+                            +
+                        </button>
                     </div>
                 </div>
             {{/games}}
@@ -138,7 +160,8 @@
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -149,11 +172,7 @@
             </div>
             <div class="modal-body">
                 <ul class="list-group" id="game-tag-list">
-                    <li class="list-group-item">An item</li>
-                    <li class="list-group-item">A second item</li>
-                    <li class="list-group-item">A third item</li>
-                    <li class="list-group-item">A fourth item</li>
-                    <li class="list-group-item">And a fifth one</li>
+
                 </ul>
             </div>
         </div>
