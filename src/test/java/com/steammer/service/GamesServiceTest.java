@@ -14,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,18 +30,25 @@ public class GamesServiceTest extends TestCase {
 
     @Test
     public void testFindAllPaging() {
-        List<GameLimitTagListResponseDto> games;
-
+        List<GameLimitTagListResponseDto> games1;
+        List<GameLimitTagListResponseDto> games2;
         //when
-        games = gamesService.findAllPaging(0,9);
+        games1 = gamesService.findAllPaging(0);
 
         //then
-        assertThat(games.size()).isEqualTo(9);
+        assertThat(games1.size()).isEqualTo(9);
+
+        //when
+        games2 = gamesService.findAllPaging(1);
+
+        //then
+        assertThat(games2.size()).isEqualTo(9);
+        System.out.println("1. "+games1.get(0).getGameName()+"2. "+games2.get(0).getGameName());
     }
 
     @Test
     public void testFindGameTags() {
-        //given
+        //when
         List<GameTag> testGameTags = gameRepository.findById(Long.valueOf(1016920)).get().getGameTags();
 
         Collections.sort(testGameTags, new Comparator<GameTag>() {
@@ -58,7 +64,7 @@ public class GamesServiceTest extends TestCase {
             }
         });
 
-        //when
+
         List<GameTagResponseDto> gameTags = gamesService.findGameTags(Long.valueOf(1016920));
 
         Collections.sort(gameTags, new Comparator<GameTagResponseDto>() {

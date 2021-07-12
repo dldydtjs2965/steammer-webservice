@@ -1,4 +1,4 @@
-package com.steammer.domain;
+package com.steammer.domain.gameTag;
 
 import com.steammer.domain.gameTag.GameTag;
 import com.steammer.domain.gameTag.GameTagRepository;

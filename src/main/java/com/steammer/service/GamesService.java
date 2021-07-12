@@ -19,11 +19,9 @@ public class GamesService {
 
     private final GameRepository gameRepository;
 
-    private final GameTagRepository gameTagRepository;
-
     @Transactional(readOnly = true)
-    public List<GameLimitTagListResponseDto> findAllPaging(int firstIndex, int lastIndex) {
-        return gameRepository.findAll(PageRequest.of(firstIndex, lastIndex)).stream()
+    public List<GameLimitTagListResponseDto> findAllPaging(Integer page) {
+        return gameRepository.findAll(PageRequest.of(page, 9)).stream()
                 .map(GameLimitTagListResponseDto::new)
                 .collect(Collectors.toList());
     }

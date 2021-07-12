@@ -1,4 +1,4 @@
-package com.steammer.domain;
+package com.steammer.domain.games;
 
 import com.steammer.domain.games.Game;
 import com.steammer.domain.games.GameRepository;

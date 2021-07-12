@@ -1,4 +1,4 @@
-package com.steammer.domain;
+package com.steammer.domain.tags;
 
 import com.steammer.domain.tags.Tag;
 import com.steammer.domain.tags.TagRepository;

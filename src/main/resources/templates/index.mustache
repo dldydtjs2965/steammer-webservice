@@ -16,8 +16,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
-    <!--Mustache js-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
     <style>
         body {
             background-color: #1b2838;
@@ -48,7 +47,7 @@
             color: gray;
         }
 
-        #card .tag-box {
+        .tag-box {
             float: revert;
             text-align: center;
         }
@@ -85,17 +84,44 @@
         }
     </style>
     <script>
+        let page=0;
+
+        function addGames(){
+            $.ajax({
+                type: "POST",
+                url: '/api/appendGames',
+                data: JSON.stringify(page),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (response) {
+                    let template = $('.row').html();
+                    for (let game of response['games']) {
+                        let html = Mustache.render(template, response)
+
+                        $('.row').append(html)
+                        console.log(page);
+                    }
+                    page += 1
+                },
+                error: function () {
+                    alert("Games append error!!")
+                    $('html').scrollTop(0);
+                }
+            });
+        }
+
         function getGameTag(gameId) {
             $("#game-tag-list").empty()
             $.ajax({
                 type: "POST",
                 url: "/api/gameTagResponse",
-                data: {gameId: gameId},
+                data: JSON.stringify(gameId),
                 dataType: "json",
+                contentType:"application/json",
                 success: function (response) {
                     let gameTags = response['gameTags']
                     console.log(response)
-                    for(let i = 0;i < gameTags.length; i++){
+                    for (let i = 0; i < gameTags.length; i++) {
                         let tagId = gameTags[i]['tag']['tagId']
                         let tagName = gameTags[i]['tag']['tagName']
 
@@ -109,6 +135,8 @@
                 }
             })
         }
+
+
     </script>
 </head>
 <body>
@@ -116,10 +144,12 @@
     <h1>steam</h1>
 </div>
 <div class="wrap">
+    <button type="button" class="btn btn-secondary btn-sm" onclick="addGames()">테스트</button>
+
     <div class="container">
         <div class="row">
             {{#games}}
-                <div class="col-xs-12 col-sm-6 col-md-4" id="{{gameId}}">
+                <div class="col-xs-12 col-sm-6 col-md-4 slide-bottom" id="card">
                     <img class="card-img-top" src="{{imgUrl}}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{gameName}}</h5>
