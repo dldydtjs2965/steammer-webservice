@@ -86,7 +86,14 @@
     <script>
         let page=0;
 
+        $(window).scroll(function() {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                addGames()
+            }
+        });
+
         function addGames(){
+            page++
             $.ajax({
                 type: "POST",
                 url: '/api/appendGames',
@@ -94,14 +101,48 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function (response) {
-                    let template = $('.row').html();
-                    for (let game of response['games']) {
-                        let html = Mustache.render(template, response)
-
+                    let games = response['games']
+                    let html = ``
+                    for (let game of games) {
+                        let card = `<div class="col-xs-12 col-sm-6 col-md-4 slide-bottom" id="card">
+                                        <img class="card-img-top" src="${game['imgUrl']}" alt="Card image cap">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${game['gameName']}</h5>
+                                            <p class="card-text">${game['gameInfo']}.</p>
+                                            <div class="card-sub-body">
+                                                <div class="summary column" id="launch-date">출시날짜:</div>
+                                                <div class="summary column">
+                                                    <span class="game_review_summary mixed" style="margin-left: 20px">${game['launchDate']}</span>
+                                                </div>
+                                                <div class="subtitle column all" id="review">모든 평가:</div>
+                                                <div class="summary column">
+                                                    <span class="game_review_summary mixed" style="margin-left: 20px">${game['evaluation']}</span>
+                                                </div>
+                                                <div class="dev_row">
+                                                    <div class="subtitle column" id="dev-company">개발자:</div>
+                                                    <span class="column" id="developers_list"
+                                                          style="margin-left: 20px">${game['devCompany']}</span>
+                                                    <div class="dev_row">
+                                                        <div class="subtitle column" id="distributor">배급사:</div>
+                                                        <span class="column" style="margin-left: 20px">${game['distributor']}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tag-box">`
+                        for(let tag of game['gameTags']){
+                            tag = `<a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag"
+                                    itemid="${tag['tagId']}">${tag['tagName']}</a>`
+                            card += tag
+                        }
+                        html = card + `<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                                    data-target="#exampleModal" onclick="getGameTag(${game['gameId']})">
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>`
                         $('.row').append(html)
-                        console.log(page);
                     }
-                    page += 1
                 },
                 error: function () {
                     alert("Games append error!!")
@@ -128,7 +169,6 @@
                         let html = `<li class="list-group-item" itemid="${tagId}">${tagName}</li>`
                         $("#game-tag-list").append(html);
                     }
-
                 },
                 error: function () {
                     alert("Game Tag POST Error")
@@ -144,9 +184,6 @@
     <h1>steam</h1>
 </div>
 <div class="wrap">
-    <button type="button" class="btn btn-secondary btn-sm" onclick="addGames()">테스트</button>
-
-    <div class="container">
         <div class="row">
             {{#games}}
                 <div class="col-xs-12 col-sm-6 col-md-4 slide-bottom" id="card">
