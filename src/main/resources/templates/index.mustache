@@ -182,6 +182,13 @@
 <body>
 <div class="header">
     <h1>steam</h1>
+    {{#steammerUserName}}
+        Logged in as: <span id="user">{{steammerUserName}}</span>
+        <a href="/logout" class="btn btn-info active" role="button">Logout</a>
+    {{/steammerUserName}}
+    {{^steammerUserName}}
+        <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
+    {{/steammerUserName}}
 </div>
 <div class="wrap">
         <div class="row">
