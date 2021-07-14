@@ -94,10 +94,11 @@
 
         function addGames(){
             page++
+            let size = 9
             $.ajax({
                 type: "POST",
                 url: '/api/appendGames',
-                data: JSON.stringify(page),
+                data: JSON.stringify({"page":page, "size":size}),
                 dataType: "json",
                 contentType: "application/json",
                 success: function (response) {
@@ -187,7 +188,9 @@
         <a href="/logout" class="btn btn-info active" role="button">Logout</a>
     {{/steammerUserName}}
     {{^steammerUserName}}
-        <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
+        <a href="/oauth2/authorization/google" class="btn btn-secondary active" role="button">Google Login</a>
+
+        <a href="/oauth2/authorization/naver" class="btn btn-success active" role="button">Naver Login</a>
     {{/steammerUserName}}
 </div>
 <div class="wrap">

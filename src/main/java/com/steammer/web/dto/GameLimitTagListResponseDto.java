@@ -43,6 +43,6 @@ public class GameLimitTagListResponseDto {
         this.videoUrl = entity.getVideoUrl();
         this.devCompany = entity.getDevCompany();
         this.distributor = entity.getDistributor();
-        this.gameTags = entity.getGameTags().stream().limit(3L).map(GameTag::getTag).collect(Collectors.toList());
+        this.gameTags = entity.getGameTags().stream().limit(5L).map(GameTag::getTag).collect(Collectors.toList());
     }
 }

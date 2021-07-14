@@ -1,5 +1,6 @@
 package com.steammer.web;
 
+import com.steammer.config.auth.LoginUser;
 import com.steammer.config.auth.dto.SessionUser;
 import com.steammer.service.GamesService;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +18,8 @@ public class IndexController {
     private final HttpSession httpSession;
 
     @GetMapping("/")
-    public String index(Model model){
-        model.addAttribute("games", gamesService.findAllPaging(0));
-
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+    public String index(Model model, @LoginUser SessionUser user){
+        model.addAttribute("games", gamesService.findAllPaging(0,9));
 
         if (user != null){
             model.addAttribute("steammerUserName", user.getName());

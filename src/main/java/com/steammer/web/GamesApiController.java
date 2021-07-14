@@ -17,10 +17,9 @@ public class GamesApiController {
     private final GamesService gamesService;
 
     @PostMapping("api/appendGames")
-    public Map<String,List<GameLimitTagListResponseDto>> gamesReResponse (@RequestBody Integer page){
+    public Map<String,List<GameLimitTagListResponseDto>> gamesReResponse (@RequestBody Map<String,Integer> request){
         HashMap<String,List<GameLimitTagListResponseDto>> map = new HashMap<>();
-        map.put("games",gamesService.findAllPaging(page));
-        System.out.println("page="+page);
+        map.put("games",gamesService.findAllPaging(request.get("page"), request.get("size")));;
         return map;
     }
 
