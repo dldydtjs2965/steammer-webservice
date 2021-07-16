@@ -1,8 +1,10 @@
 package com.steammer.web;
 
 import com.steammer.service.GamesService;
+import com.steammer.service.UserService;
 import com.steammer.web.dto.LimitTagGameResponseDto;
 import com.steammer.web.dto.GameTagResponseDto;
+import com.steammer.web.dto.UserGameSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,8 @@ import java.util.Map;
 @RestController
 public class GamesApiController {
     private final GamesService gamesService;
+
+    private final UserService userService;
 
     @PostMapping("api/v1/appendGames")
     public Map<String,List<LimitTagGameResponseDto>> gamesReResponse (@RequestBody Map<String,Integer> request){
@@ -32,5 +36,10 @@ public class GamesApiController {
     @GetMapping("api/v1/videoResponse")
     public String gameVideoUrlResponse(@RequestParam Long gameId) {
         return gamesService.findVideoUrl(gameId);
+    }
+
+    @PostMapping("api/v1/userGameSave")
+    public Long userGameSave(@RequestBody UserGameSaveRequestDto requestDto){
+        return userService.save(requestDto);
     }
 }
