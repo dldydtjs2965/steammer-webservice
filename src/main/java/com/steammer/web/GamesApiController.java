@@ -1,10 +1,9 @@
 package com.steammer.web;
 
 import com.steammer.service.GamesService;
-import com.steammer.web.dto.GameLimitTagListResponseDto;
+import com.steammer.web.dto.LimitTagGameResponseDto;
 import com.steammer.web.dto.GameTagResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -16,17 +15,22 @@ import java.util.Map;
 public class GamesApiController {
     private final GamesService gamesService;
 
-    @PostMapping("api/appendGames")
-    public Map<String,List<GameLimitTagListResponseDto>> gamesReResponse (@RequestBody Map<String,Integer> request){
-        HashMap<String,List<GameLimitTagListResponseDto>> map = new HashMap<>();
+    @PostMapping("api/v1/appendGames")
+    public Map<String,List<LimitTagGameResponseDto>> gamesReResponse (@RequestBody Map<String,Integer> request){
+        HashMap<String,List<LimitTagGameResponseDto>> map = new HashMap<>();
         map.put("games",gamesService.findAllPaging(request.get("page"), request.get("size")));;
         return map;
     }
 
-    @PostMapping("api/gameTagResponse")
+    @PostMapping("api/v1/gameTagResponse")
     public Map<String,List<GameTagResponseDto>> gameTagResponseDtoList(@RequestBody Long gameId) {
         HashMap<String,List<GameTagResponseDto>> map = new HashMap<String,List<GameTagResponseDto>>();
         map.put("gameTags",gamesService.findGameTags(gameId));
         return map;
+    }
+
+    @GetMapping("api/v1/videoResponse")
+    public String gameVideoUrlResponse(@RequestParam Long gameId) {
+        return gamesService.findVideoUrl(gameId);
     }
 }

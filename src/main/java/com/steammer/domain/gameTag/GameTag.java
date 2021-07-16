@@ -16,6 +16,7 @@ public class GameTag {
 
     //게임 태그 키
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="GAME_TAG_KEY")
     private Long gameTagKey;
 
@@ -34,5 +35,4 @@ public class GameTag {
         this.game = game;
         this.tag  = tag;
     }
-
 }

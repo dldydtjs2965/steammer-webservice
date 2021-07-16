@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class GameLimitTagListResponseDto {
+public class LimitTagGameResponseDto {
     // 게임 아이디(PK)
     private Long gameId;
     // 게임 이름
@@ -33,7 +33,7 @@ public class GameLimitTagListResponseDto {
 
     private List<Tag> gameTags = new ArrayList<>();
 
-    public GameLimitTagListResponseDto(Game entity) {
+    public LimitTagGameResponseDto(Game entity) {
         this.gameId = entity.getGameId();
         this.gameName = entity.getGameName();
         this.gameInfo = entity.getGameInfo();

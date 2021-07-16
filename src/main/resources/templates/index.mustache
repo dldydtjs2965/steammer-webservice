@@ -82,31 +82,39 @@
             -webkit-line-clamp: 2; /* number of lines to show */
             -webkit-box-orient: vertical;
         }
+
+        video {
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
     </style>
     <script>
         let page=0;
 
         $(window).scroll(function() {
             if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-                addGames()
+                appendGames()
             }
         });
 
-        function addGames(){
+        function appendGames(){
             page++
             let size = 9
             $.ajax({
                 type: "POST",
-                url: '/api/appendGames',
+                url: '/api/v1/appendGames',
                 data: JSON.stringify({"page":page, "size":size}),
                 dataType: "json",
                 contentType: "application/json",
                 success: function (response) {
+                    console.log(response)
                     let games = response['games']
                     let html = ``
                     for (let game of games) {
                         let card = `<div class="col-xs-12 col-sm-6 col-md-4 slide-bottom" id="card">
-                                        <img class="card-img-top" src="${game['imgUrl']}" alt="Card image cap">
+                                        <img class="card-img-top" src="${game['imgUrl']}" alt="Card image cap" onclick="${game['gameId']}" data-toggle="modal"
+                                data-target="#vedioModal">
                                         <div class="card-body">
                                             <h5 class="card-title">${game['gameName']}</h5>
                                             <p class="card-text">${game['gameInfo']}.</p>
@@ -137,7 +145,7 @@
                             card += tag
                         }
                         html = card + `<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                                    data-target="#exampleModal" onclick="getGameTag(${game['gameId']})">
+                                                    data-target="#tagModal" onclick="getGameTag(${game['gameId']})">
                                                 +
                                             </button>
                                         </div>
@@ -145,8 +153,8 @@
                         $('.row').append(html)
                     }
                 },
-                error: function () {
-                    alert("Games append error!!")
+                error: function(request, status, error){
+                    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                     $('html').scrollTop(0);
                 }
             });
@@ -156,7 +164,7 @@
             $("#game-tag-list").empty()
             $.ajax({
                 type: "POST",
-                url: "/api/gameTagResponse",
+                url: "/api/v1/gameTagResponse",
                 data: JSON.stringify(gameId),
                 dataType: "json",
                 contentType:"application/json",
@@ -171,13 +179,31 @@
                         $("#game-tag-list").append(html);
                     }
                 },
-                error: function () {
-                    alert("Game Tag POST Error")
+                error: function(request, status, error){
+                    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                 }
             })
         }
 
-
+        function getGameVideo(gameId){
+            $('#videoModal .modal-body').empty();
+            $.ajax({
+                type: "GET",
+                url: "api/v1/videoResponse",
+                data: { gameId: gameId },
+                success: function (response){
+                    console.log(response)
+                    let videoTag = `<video controls width="600">
+                                        <source src="${response}"
+                                                    type="video/mp4">
+                                    </video>`
+                    $('#videoModal .modal-body').append(videoTag);
+                },
+                error: function(request, status, error){
+                    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                }
+            })
+        }
     </script>
 </head>
 <body>
@@ -197,7 +223,8 @@
         <div class="row">
             {{#games}}
                 <div class="col-xs-12 col-sm-6 col-md-4 slide-bottom" id="card">
-                    <img class="card-img-top" src="{{imgUrl}}" alt="Card image cap">
+                    <img class="card-img-top" src="{{imgUrl}}" alt="Card image cap" onclick="getGameVideo({{gameId}})" data-toggle="modal"
+                         data-target="#videoModal">
                     <div class="card-body">
                         <h5 class="card-title">{{gameName}}</h5>
                         <p class="card-text">{{gameInfo}}.</p>
@@ -227,7 +254,7 @@
                                itemid="{{tagId}}">{{tagName}}</a>
                         {{/gameTags}}
                         <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                data-target="#exampleModal" onclick="getGameTag({{gameId}})">
+                                data-target="#tagModal" onclick="getGameTag({{gameId}})">
                             +
                         </button>
                     </div>
@@ -236,13 +263,13 @@
         </div>
     </div>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<!-- tag Modal -->
+<div class="modal fade" id="tagModal" tabindex="-1" role="dialog" aria-labelledby="tagModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="tagModalLabel">Modal title</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -251,6 +278,23 @@
                 <ul class="list-group" id="game-tag-list">
 
                 </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- video odal -->
+<div class="modal fade bd-example-modal-lg" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="videoModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
             </div>
         </div>
     </div>

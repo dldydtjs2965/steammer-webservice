@@ -1,15 +1,15 @@
 package com.steammer.service;
 
 import com.steammer.domain.gameTag.GameTag;
-import com.steammer.domain.games.Game;
 import com.steammer.domain.games.GameRepository;
-import com.steammer.web.dto.GameLimitTagListResponseDto;
+import com.steammer.web.dto.LimitTagGameResponseDto;
 import com.steammer.web.dto.GameTagResponseDto;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
@@ -30,20 +30,16 @@ public class GamesServiceTest extends TestCase {
 
     @Test
     public void testFindAllPaging() {
-        List<GameLimitTagListResponseDto> games1;
-        List<GameLimitTagListResponseDto> games2;
-        //when
-        games1 = gamesService.findAllPaging(0);
-
-        //then
-        assertThat(games1.size()).isEqualTo(9);
+        List<LimitTagGameResponseDto> games2;
 
         //when
-        games2 = gamesService.findAllPaging(1);
+        games2 = gamesService.findAllPaging(1, 9);
+
+        Long testGameId = gameRepository.findAllDesc(PageRequest.of(1,9)).get(1).getGameId();
 
         //then
         assertThat(games2.size()).isEqualTo(9);
-        System.out.println("1. "+games1.get(0).getGameName()+"2. "+games2.get(0).getGameName());
+        assertThat(games2.get(1).getGameId()).isEqualTo(testGameId);
     }
 
     @Test
@@ -84,5 +80,15 @@ public class GamesServiceTest extends TestCase {
         for (int i = 0; i<gameTags.size(); i++) {
             assertThat(testGameTags.get(i).getGameTagKey()).isEqualTo(gameTags.get(i).getGameTagKey());
         }
+    }
+
+    @Test
+    public void testFindVideoUrl(){
+        //when
+        String videoUrl = gamesService.findVideoUrl(977950L);
+
+        String realVideoUrl = "https://cdn.akamai.steamstatic.com/steam/apps/256741361/movie480.webm?t=1548371782";
+        //then
+        assertThat(videoUrl).isEqualTo(realVideoUrl);
     }
 }

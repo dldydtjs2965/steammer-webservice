@@ -2,10 +2,12 @@ package com.steammer.domain.games;
 
 import com.steammer.domain.games.Game;
 import com.steammer.domain.games.GameRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,47 +23,50 @@ public class GameRepositoryTest {
     @Autowired
     GameRepository gameRepository;
 
+    @Before
+    public void cleanup() {
+        gameRepository.deleteAll();
+    }
+
     @Test
     public void create() {
-
+        Long id = Long.valueOf("123456");
+        String gameName = "test_name";
+        String gameInfo = "test_info";
+        Date launchDate = Date.valueOf("2021-05-05");
+        String imgUrl = "test_url";
+        String videoUrl = "test_url";
+        String devCompany = "test-company";
+        String distributor = "test-dis";
         //given
         Game game = Game.builder()
-                .gameId(Long.valueOf("123456"))
-                .gameName("test_name")
-                .gameInfo("test_info")
-                .launchDate(Date.valueOf("2021-05-05"))
-                .imgUrl("test_url")
-                .videoUrl("test-url")
-                .devCompany("test-company")
-                .distributor("test-dis")
+                .gameId(id)
+                .gameName(gameName)
+                .gameInfo(gameInfo)
+                .launchDate(launchDate)
+                .imgUrl(imgUrl)
+                .videoUrl(videoUrl)
+                .devCompany(devCompany)
+                .distributor(distributor)
                 .build();
         //when
         gameRepository.save(game);
 
         //then
-        Optional<Game> gamesList = gameRepository.findById(Long.valueOf("12345"));
+        Optional<Game> gamesList = gameRepository.findById(id);
 
          //게임 테스트 데이터 확인
         Game games =  gamesList.orElse(null);
 
         assert games != null;
-        assertThat(games.getGameId()).isEqualTo(Long.valueOf("12345"));
-        assertThat(games.getGameName()).isEqualTo("test_name");
-        assertThat(games.getGameInfo()).isEqualTo("test_info");
-        assertThat(games.getLaunchDate()).isEqualTo(Date.valueOf("2021-05-05"));
-        assertThat(games.getImgUrl()).isEqualTo("test_url");
-        assertThat(games.getVideoUrl()).isEqualTo("test-url");
-        assertThat(games.getDevCompany()).isEqualTo("test-company");
-        assertThat(games.getDistributor()).isEqualTo("test-dis");
+        assertThat(games.getGameId()).isEqualTo(id);
+        assertThat(games.getGameName()).isEqualTo(gameName);
+        assertThat(games.getGameInfo()).isEqualTo(gameInfo);
+        assertThat(games.getLaunchDate()).isEqualTo(launchDate);
+        assertThat(games.getImgUrl()).isEqualTo(imgUrl);
+        assertThat(games.getVideoUrl()).isEqualTo(imgUrl);
+        assertThat(games.getDevCompany()).isEqualTo(devCompany);
+        assertThat(games.getDistributor()).isEqualTo(distributor);
     }
-
-//    @Test
-//    public void read() {
-//        Optional<Games> user = gamesRepository.findById(2L);
-//        user.ifPresent( selectUser -> {
-//            // ifPresent: 값이 있다면, 가져옴
-//            System.out.println(selectUser.toString());
-//        });
-//    }
 
 }
