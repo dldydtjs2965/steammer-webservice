@@ -50,4 +50,22 @@ public class UserServiceTest extends TestCase {
 
         assertThat(id).isEqualTo(testId);
     }
+
+    @Test
+    public void testCancelGame() {
+        // given
+        Game game = gameRepository.findById(977950L).get();
+        User user = userRepository.findById(1L).get();
+        UserGameSaveRequestDto requestDto = UserGameSaveRequestDto.builder()
+                .user(user)
+                .game(game)
+                .build();
+        Long id = userService.save(requestDto);
+
+        //then
+        userService.cancelGame(user.getId(),game.getGameId());
+
+        //when
+        assertThat(userRepository.findById(id)).isEmpty();
+    }
 }

@@ -7,6 +7,7 @@ import com.steammer.domain.games.Game;
 import com.steammer.domain.games.GameRepository;
 import com.steammer.domain.userGame.UserGame;
 import com.steammer.domain.userGame.UserGameRepository;
+import com.steammer.service.UserService;
 import com.steammer.web.dto.UserGameSaveRequestDto;
 import junit.framework.TestCase;
 import net.minidev.json.JSONObject;
@@ -118,5 +119,29 @@ public class GamesApiControllerTest extends TestCase {
         List<UserGame> all = userGameRepository.findAll();
         assertThat(all.get(0).getGame()).isEqualTo(game);
         assertThat(all.get(0).getUser()).isEqualTo(user);
+    }
+
+    @Test
+    public void testUserGameCancel() {
+        String url = "http://localhost:"+port+"/api/v1/userGameCancel";
+
+        // given
+        Game game = gameRepository.findById(977950L).get();
+        User user = userRepository.findById(1L).get();
+        UserGame userGame = UserGame.builder()
+                                .user(user)
+                                .game(game)
+                                .build();
+
+        userGameRepository.save(userGame);
+        //when
+        Map<String,Long> request = new HashMap<>();
+
+        request.put("userId", 1L);
+        request.put("gameId", 977950L);
+        //when
+        restTemplate.delete(url,request);
+        //then
+        assertThat(userGameRepository.findAll().isEmpty()).isTrue();
     }
 }

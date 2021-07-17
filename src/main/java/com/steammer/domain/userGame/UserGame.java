@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Getter
 public class UserGame {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="USER_GAME_KEY")
     private Long userGameKey;
 
@@ -28,6 +27,7 @@ public class UserGame {
 
     @Builder
     public UserGame(Game game, User user){
+        this.userGameKey = game.getGameId()+user.getId();
         this.game = game;
         this.user = user;
     }

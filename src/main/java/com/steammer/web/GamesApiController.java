@@ -42,4 +42,9 @@ public class GamesApiController {
     public Long userGameSave(@RequestBody UserGameSaveRequestDto requestDto){
         return userService.save(requestDto);
     }
+
+    @DeleteMapping("api/v1/userGameCancel")
+    public void userGameCancel(@RequestBody Map<String,Long> request) {
+        userService.cancelGame(request.get("userId"), request.get("gameId"));
+    }
 }

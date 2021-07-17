@@ -16,4 +16,9 @@ public class UserService {
     public Long save(UserGameSaveRequestDto requestDto){
         return userGameRepository.save(requestDto.toEntity()).getUserGameKey();
     }
+
+    @Transactional
+    public void cancelGame(Long userId, Long gameId){
+        userGameRepository.deleteById(gameId+userId);
+    }
 }
