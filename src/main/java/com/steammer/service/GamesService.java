@@ -1,5 +1,6 @@
 package com.steammer.service;
 
+import com.steammer.domain.games.Game;
 import com.steammer.domain.games.GameRepository;
 import com.steammer.web.dto.LimitTagGameResponseDto;
 import com.steammer.web.dto.GameTagResponseDto;
@@ -36,4 +37,7 @@ public class GamesService {
     public String findVideoUrl(Long gameId) {
         return gameRepository.findById(gameId).get().getVideoUrl();
     }
+
+    @Transactional(readOnly = true)
+    public Game findByGame(Long gameId){ return gameRepository.findById(gameId).get();}
 }

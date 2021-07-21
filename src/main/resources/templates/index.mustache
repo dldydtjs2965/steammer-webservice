@@ -9,6 +9,7 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://use.fontawesome.com/1fc2219d92.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -88,6 +89,10 @@
             left: 50%;
             transform: translateX(-50%);
         }
+
+        #book-mark{
+            float: right;
+        }
     </style>
     <script>
         let page=0;
@@ -97,6 +102,31 @@
                 appendGames()
             }
         });
+
+        function bookMark(gameId){
+            if($("#user").length){
+                let data = {
+                    "userId": $("#user").attr("itemid"),
+                    "gameId": gameId
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url:"api/v2/userGameSave",
+                    data:JSON.stringify(data),
+                    contentType: "application/json",
+                    success: function (response) {
+                        $("#book-mark").removeClass("fa-bookmark-o").addClass("fa-bookmark")
+                    },
+                    error: function(request, status, error){
+                        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                        $('html').scrollTop(0);
+                    }
+                });
+            }else{
+                alert("로그인 후 이용가능한 서비스 입니다.")
+            }
+        }
 
         function appendGames(){
             page++
@@ -116,6 +146,7 @@
                                         <img class="card-img-top" src="${game['imgUrl']}" alt="Card image cap" onclick="${game['gameId']}" data-toggle="modal"
                                 data-target="#vedioModal">
                                         <div class="card-body">
+                                            <i class="fa fa-bookmark-o fa-2x" aria-hidden="true"></i>
                                             <h5 class="card-title">${game['gameName']}</h5>
                                             <p class="card-text">${game['gameInfo']}.</p>
                                             <div class="card-sub-body">
@@ -210,7 +241,7 @@
 <div class="header">
     <h1>steam</h1>
     {{#steammerUserName}}
-        Logged in as: <span id="user">{{steammerUserName}}</span>
+        Logged in as: <span id="user" itemid="{{steammerUserId}}">{{steammerUserName}}</span>
         <a href="/logout" class="btn btn-info active" role="button">Logout</a>
     {{/steammerUserName}}
     {{^steammerUserName}}
@@ -218,6 +249,10 @@
 
         <a href="/oauth2/authorization/naver" class="btn btn-success active" role="button">Naver Login</a>
     {{/steammerUserName}}
+    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+            data-target="#tagModal" onclick="testUserGame()">
+        +
+    </button>
 </div>
 <div class="wrap">
         <div class="row">
@@ -226,6 +261,7 @@
                     <img class="card-img-top" src="{{imgUrl}}" alt="Card image cap" onclick="getGameVideo({{gameId}})" data-toggle="modal"
                          data-target="#videoModal">
                     <div class="card-body">
+                        <i class="fa fa-bookmark-o fa-2x" aria-hidden="true" id="book-mark" onclick="bookMark({{gameId}})"></i>
                         <h5 class="card-title">{{gameName}}</h5>
                         <p class="card-text">{{gameInfo}}.</p>
                         <div class="card-sub-body">

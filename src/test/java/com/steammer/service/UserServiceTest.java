@@ -39,9 +39,9 @@ public class UserServiceTest extends TestCase {
         Game game = gameRepository.findById(977950L).get();
         User user = userRepository.findById(1L).get();
         UserGameSaveRequestDto requestDto = UserGameSaveRequestDto.builder()
-                                                .user(user)
-                                                .game(game)
-                                                .build();
+                .user(user)
+                .game(game)
+                .build();
         //when
         Long id = userService.save(requestDto);
 

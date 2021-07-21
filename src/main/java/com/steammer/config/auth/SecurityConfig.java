@@ -18,8 +18,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .headers().frameOptions().disable().disable()
                 .authorizeRequests() //URL 별 권한 관리 옵션
-                .antMatchers("/","/css/**","/images/**","/js/**","/api/**").permitAll() // 모든 사용자
-                .antMatchers("/api2/**").hasRole(Role.USER.name()) // 유저 들만
+                .antMatchers("/","/css/**","/images/**","/js/**","/api/v1/**").permitAll() // 모든 사용자
+                .antMatchers("/api/v2/**").hasRole(Role.USER.name()) // 유저 들만
                 .anyRequest().authenticated() //설정값 이외의 URL
         .and()
                 .logout()

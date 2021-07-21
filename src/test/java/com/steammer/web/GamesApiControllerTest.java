@@ -12,15 +12,20 @@ import com.steammer.web.dto.UserGameSaveRequestDto;
 import junit.framework.TestCase;
 import net.minidev.json.JSONObject;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
@@ -41,19 +46,11 @@ public class GamesApiControllerTest extends TestCase {
     @Autowired
     private GameRepository gameRepository;
 
-    @Autowired
-    UserRepository userRepository;
 
-    @Autowired
-    UserGameRepository userGameRepository;
+    private MockMvc mvc;
 
     @LocalServerPort
     private int port;
-
-    @After
-    public void tearDown() throws Exception {
-        userRepository.deleteAll();
-    }
 
     @Test
     public void testGamesReResponse() {
@@ -98,50 +95,5 @@ public class GamesApiControllerTest extends TestCase {
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isEqualTo("https://cdn.akamai.steamstatic.com/steam/apps/256820008/movie480_vp9.webm?t=1612278985");
-    }
-
-
-    @Test
-    public void testUserGameSave() {
-        String url = "http://localhost:"+port+"/api/v1/userGameSave";
-
-        // given
-        Game game = gameRepository.findById(977950L).get();
-        User user = userRepository.findById(1L).get();
-        UserGameSaveRequestDto requestDto = UserGameSaveRequestDto.builder()
-                .user(user)
-                .game(game)
-                .build();
-        //when
-        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
-        //then
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        List<UserGame> all = userGameRepository.findAll();
-        assertThat(all.get(0).getGame()).isEqualTo(game);
-        assertThat(all.get(0).getUser()).isEqualTo(user);
-    }
-
-    @Test
-    public void testUserGameCancel() {
-        String url = "http://localhost:"+port+"/api/v1/userGameCancel";
-
-        // given
-        Game game = gameRepository.findById(977950L).get();
-        User user = userRepository.findById(1L).get();
-        UserGame userGame = UserGame.builder()
-                                .user(user)
-                                .game(game)
-                                .build();
-
-        userGameRepository.save(userGame);
-        //when
-        Map<String,Long> request = new HashMap<>();
-
-        request.put("userId", 1L);
-        request.put("gameId", 977950L);
-        //when
-        restTemplate.delete(url,request);
-        //then
-        assertThat(userGameRepository.findAll().isEmpty()).isTrue();
     }
 }

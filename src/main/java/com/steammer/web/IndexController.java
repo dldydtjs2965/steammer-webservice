@@ -3,6 +3,7 @@ package com.steammer.web;
 import com.steammer.config.auth.LoginUser;
 import com.steammer.config.auth.dto.SessionUser;
 import com.steammer.service.GamesService;
+import com.steammer.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpSession;
 public class IndexController {
 
     private final GamesService gamesService;
+    private final UserService userService;
     private final HttpSession httpSession;
 
     @GetMapping("/")
@@ -23,6 +25,7 @@ public class IndexController {
 
         if (user != null){
             model.addAttribute("steammerUserName", user.getName());
+            model.addAttribute("steammerUserId",userService.findByUserId(user.getEmail()));
             System.out.println("userName"+user.getName());
         }
         return "index";
