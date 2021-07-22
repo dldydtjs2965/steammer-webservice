@@ -6,13 +6,12 @@ import com.steammer.domain.User.User;
 import com.steammer.domain.games.Game;
 import com.steammer.service.GamesService;
 import com.steammer.service.UserService;
+import com.steammer.web.dto.UserGameResponseDto;
 import com.steammer.web.dto.UserGameSaveRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -22,6 +21,11 @@ public class UserApiController {
     private final UserService userService;
 
     private final GamesService gamesService;
+
+    @GetMapping("api/v2/userGameList")
+    public List<UserGameResponseDto> userGameResponseDto(@RequestParam Long id){
+        return userService.findUserGame(id);
+    }
 
     @PostMapping("api/v2/userGameSave")
     public Long userGameSave(@RequestBody Map<String,Long> request){

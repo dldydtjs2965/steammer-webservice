@@ -1,10 +1,13 @@
 package com.steammer.domain.User;
 
+import com.steammer.domain.userGame.UserGame;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -28,6 +31,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE")
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserGame> userGames = new ArrayList<>();
 
     @Builder
     public User(String name, String email,String picture, Role role){

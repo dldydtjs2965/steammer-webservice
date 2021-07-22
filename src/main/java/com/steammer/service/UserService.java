@@ -5,14 +5,18 @@ import com.steammer.domain.User.User;
 import com.steammer.domain.User.UserRepository;
 import com.steammer.domain.games.Game;
 import com.steammer.domain.games.GameRepository;
+import com.steammer.domain.userGame.UserGame;
 import com.steammer.domain.userGame.UserGameRepository;
+import com.steammer.web.dto.UserGameResponseDto;
 import com.steammer.web.dto.UserGameSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -52,5 +56,13 @@ public class UserService {
         }else{
             return user.get().getId();
         }
+    }
+    
+    @Transactional
+    public List<UserGameResponseDto> findUserGame(Long id){
+        return userGameRepository.findAllByUserHaveGame(id).stream()
+                .map(UserGameResponseDto::new)
+                .collect(Collectors.toList());
+
     }
 }

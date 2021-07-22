@@ -5,6 +5,7 @@ import com.steammer.domain.User.UserRepository;
 import com.steammer.domain.games.Game;
 import com.steammer.domain.games.GameRepository;
 import com.steammer.domain.userGame.UserGameRepository;
+import com.steammer.web.dto.UserGameResponseDto;
 import com.steammer.web.dto.UserGameSaveRequestDto;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -62,10 +65,27 @@ public class UserServiceTest extends TestCase {
                 .build();
         Long id = userService.save(requestDto);
 
-        //then
+        //when
         userService.cancelGame(user.getId(),game.getGameId());
 
-        //when
+        //then
         assertThat(userRepository.findById(id)).isEmpty();
+    }
+
+    @Test
+    public void findUserGame() {
+        // given
+        Game game = gameRepository.findById(977950L).get();
+        User user = userRepository.findById(1L).get();
+        UserGameSaveRequestDto requestDto = UserGameSaveRequestDto.builder()
+                .user(user)
+                .game(game)
+                .build();
+        userService.save(requestDto);
+        //when
+        List<UserGameResponseDto> responseDtos = userService.findUserGame(1L);
+
+        //then
+        assertThat(responseDtos.get(0).getGameId()).isEqualTo(977950L);
     }
 }

@@ -90,21 +90,81 @@
             transform: translateX(-50%);
         }
 
-        #book-mark{
+        i {
             float: right;
         }
     </style>
     <script>
-        let page=0;
+        $( document ).ready(function() {
+            bookMarkView();
+        });
 
-        $(window).scroll(function() {
+        let page = 0;
+
+        $(window).scroll(function () {
             if ($(window).scrollTop() == $(document).height() - $(window).height()) {
                 appendGames()
             }
         });
 
-        function bookMark(gameId){
-            if($("#user").length){
+        function bookMarkView(){
+            if ($("#user").length){
+                let userId = $("#user").attr("itemid")
+                $.ajax({
+                    type: "GET",
+                    url:"api/v2/userGameList",
+                    data: { "id": userId },
+                    contentType: "application/json",
+                    success: function (response) {
+                        console.log(response)
+                        for (let game of response) {
+                            $("#"+game['gameId']).removeClass("fa-bookmark-o").addClass("fa-bookmark")
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                        $('html').scrollTop(0);
+                    }
+                })
+            }
+
+        }
+
+        function bookMarkCheck(gameId){
+            let element = $("#"+gameId.toString())
+            if(element.hasClass("fa-bookmark-o")){
+                addBookMark(gameId)
+            }else{
+                cancelBookMark(gameId)
+            }
+        }
+
+        function cancelBookMark(gameId) {
+            if ($("#user").length) {
+                let data = {
+                    "userId": $("#user").attr("itemid"),
+                    "gameId": gameId
+                };
+
+                $.ajax({
+                    type: "DELETE",
+                    url: "api/v2/userGameCancel",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    success: function (response) {
+                        console.log(response)
+                        $("#"+gameId.toString()).removeClass("fa-bookmark").addClass("fa-bookmark-o")
+                    },
+                    error: function (request, status, error) {
+                        alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                        $('html').scrollTop(0);
+                    }
+                })
+            }
+        }
+
+        function addBookMark(gameId) {
+            if ($("#user").length) {
                 let data = {
                     "userId": $("#user").attr("itemid"),
                     "gameId": gameId
@@ -112,29 +172,29 @@
 
                 $.ajax({
                     type: "POST",
-                    url:"api/v2/userGameSave",
-                    data:JSON.stringify(data),
+                    url: "api/v2/userGameSave",
+                    data: JSON.stringify(data),
                     contentType: "application/json",
                     success: function (response) {
-                        $("#book-mark").removeClass("fa-bookmark-o").addClass("fa-bookmark")
+                        $("#"+gameId.toString()).removeClass("fa-bookmark-o").addClass("fa-bookmark")
                     },
-                    error: function(request, status, error){
-                        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                    error: function (request, status, error) {
+                        alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                         $('html').scrollTop(0);
                     }
                 });
-            }else{
+            } else {
                 alert("로그인 후 이용가능한 서비스 입니다.")
             }
         }
 
-        function appendGames(){
+        function appendGames() {
             page++
             let size = 9
             $.ajax({
                 type: "POST",
                 url: '/api/v1/appendGames',
-                data: JSON.stringify({"page":page, "size":size}),
+                data: JSON.stringify({"page": page, "size": size}),
                 dataType: "json",
                 contentType: "application/json",
                 success: function (response) {
@@ -146,7 +206,7 @@
                                         <img class="card-img-top" src="${game['imgUrl']}" alt="Card image cap" onclick="${game['gameId']}" data-toggle="modal"
                                 data-target="#vedioModal">
                                         <div class="card-body">
-                                            <i class="fa fa-bookmark-o fa-2x" aria-hidden="true"></i>
+                                            <i class="fa fa-bookmark-o fa-2x" aria-hidden="true" id="${game['gameId']}" onclick="bookMarkCheck(${game['gameId']})"></i>
                                             <h5 class="card-title">${game['gameName']}</h5>
                                             <p class="card-text">${game['gameInfo']}.</p>
                                             <div class="card-sub-body">
@@ -170,7 +230,7 @@
                                             </div>
                                         </div>
                                         <div class="tag-box">`
-                        for(let tag of game['gameTags']){
+                        for (let tag of game['gameTags']) {
                             tag = `<a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag"
                                     itemid="${tag['tagId']}">${tag['tagName']}</a>`
                             card += tag
@@ -178,14 +238,14 @@
                         html = card + `<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
                                                     data-target="#tagModal" onclick="getGameTag(${game['gameId']})">
                                                 +
-                                            </button>
-                                        </div>
-                                    </div>`
+                                        </button>
+                                    </div>
+                                </div>`
                         $('.row').append(html)
                     }
                 },
-                error: function(request, status, error){
-                    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                     $('html').scrollTop(0);
                 }
             });
@@ -198,7 +258,7 @@
                 url: "/api/v1/gameTagResponse",
                 data: JSON.stringify(gameId),
                 dataType: "json",
-                contentType:"application/json",
+                contentType: "application/json",
                 success: function (response) {
                     let gameTags = response['gameTags']
                     console.log(response)
@@ -210,19 +270,19 @@
                         $("#game-tag-list").append(html);
                     }
                 },
-                error: function(request, status, error){
-                    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
             })
         }
 
-        function getGameVideo(gameId){
+        function getGameVideo(gameId) {
             $('#videoModal .modal-body').empty();
             $.ajax({
                 type: "GET",
                 url: "api/v1/videoResponse",
-                data: { gameId: gameId },
-                success: function (response){
+                data: {gameId: gameId},
+                success: function (response) {
                     console.log(response)
                     let videoTag = `<video controls width="600">
                                         <source src="${response}"
@@ -230,8 +290,8 @@
                                     </video>`
                     $('#videoModal .modal-body').append(videoTag);
                 },
-                error: function(request, status, error){
-                    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
             })
         }
@@ -255,49 +315,51 @@
     </button>
 </div>
 <div class="wrap">
-        <div class="row">
-            {{#games}}
-                <div class="col-xs-12 col-sm-6 col-md-4 slide-bottom" id="card">
-                    <img class="card-img-top" src="{{imgUrl}}" alt="Card image cap" onclick="getGameVideo({{gameId}})" data-toggle="modal"
-                         data-target="#videoModal">
-                    <div class="card-body">
-                        <i class="fa fa-bookmark-o fa-2x" aria-hidden="true" id="book-mark" onclick="bookMark({{gameId}})"></i>
-                        <h5 class="card-title">{{gameName}}</h5>
-                        <p class="card-text">{{gameInfo}}.</p>
-                        <div class="card-sub-body">
-                            <div class="summary column" id="launch-date">출시날짜:</div>
-                            <div class="summary column">
-                                <span class="game_review_summary mixed" style="margin-left: 20px">{{launchDate}}</span>
-                            </div>
-                            <div class="subtitle column all" id="review">모든 평가:</div>
-                            <div class="summary column">
-                                <span class="game_review_summary mixed" style="margin-left: 20px">{{evaluation}}</span>
-                            </div>
+    <div class="row">
+        {{#games}}
+            <div class="col-xs-12 col-sm-6 col-md-4 slide-bottom" id="card">
+                <img class="card-img-top" src="{{imgUrl}}" alt="Card image cap" onclick="getGameVideo({{gameId}})"
+                     data-toggle="modal"
+                     data-target="#videoModal">
+                <div class="card-body">
+                    <i class="fa fa-bookmark-o fa-2x" aria-hidden="true" id="{{gameId}}"
+                       onclick="bookMarkCheck({{gameId}})"></i>
+                    <h5 class="card-title">{{gameName}}</h5>
+                    <p class="card-text">{{gameInfo}}.</p>
+                    <div class="card-sub-body">
+                        <div class="summary column" id="launch-date">출시날짜:</div>
+                        <div class="summary column">
+                            <span class="game_review_summary mixed" style="margin-left: 20px">{{launchDate}}</span>
+                        </div>
+                        <div class="subtitle column all" id="review">모든 평가:</div>
+                        <div class="summary column">
+                            <span class="game_review_summary mixed" style="margin-left: 20px">{{evaluation}}</span>
+                        </div>
+                        <div class="dev_row">
+                            <div class="subtitle column" id="dev-company">개발자:</div>
+                            <span class="column" id="developers_list"
+                                  style="margin-left: 20px">{{devCompany}}</span>
                             <div class="dev_row">
-                                <div class="subtitle column" id="dev-company">개발자:</div>
-                                <span class="column" id="developers_list"
-                                      style="margin-left: 20px">{{devCompany}}</span>
-                                <div class="dev_row">
-                                    <div class="subtitle column" id="distributor">배급사:</div>
-                                    <span class="column" style="margin-left: 20px">{{distributor}}</span>
-                                </div>
+                                <div class="subtitle column" id="distributor">배급사:</div>
+                                <span class="column" style="margin-left: 20px">{{distributor}}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="tag-box">
-                        {{#gameTags}}
-                            <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag"
-                               itemid="{{tagId}}">{{tagName}}</a>
-                        {{/gameTags}}
-                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                data-target="#tagModal" onclick="getGameTag({{gameId}})">
-                            +
-                        </button>
-                    </div>
                 </div>
-            {{/games}}
-        </div>
+                <div class="tag-box">
+                    {{#gameTags}}
+                        <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag"
+                           itemid="{{tagId}}">{{tagName}}</a>
+                    {{/gameTags}}
+                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                            data-target="#tagModal" onclick="getGameTag({{gameId}})">
+                        +
+                    </button>
+                </div>
+            </div>
+        {{/games}}
     </div>
+</div>
 </div>
 <!-- tag Modal -->
 <div class="modal fade" id="tagModal" tabindex="-1" role="dialog" aria-labelledby="tagModalLabel"
@@ -319,7 +381,8 @@
     </div>
 </div>
 <!-- video odal -->
-<div class="modal fade bd-example-modal-lg" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel"
+<div class="modal fade bd-example-modal-lg" id="videoModal" tabindex="-1" role="dialog"
+     aria-labelledby="videoModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
