@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
 public class GameTagRepositoryTest {
 
     @Autowired
@@ -58,7 +59,7 @@ public class GameTagRepositoryTest {
         //then
         List<GameTag> gameTagList = gameTagRepository.findAll();
 
-        GameTag testGameTag = gameTagList.get(0);
+        GameTag testGameTag = gameTagList.get(gameTagList.size()-1);
 
         assertThat(testGameTag.getGame().getGameId()).isEqualTo(testGame.getGameId());
 

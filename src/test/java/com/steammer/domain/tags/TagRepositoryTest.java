@@ -16,15 +16,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
 public class TagRepositoryTest {
 
     @Autowired
     TagRepository tagRepository;
-
-    @Before
-    public void cleanup() {
-        tagRepository.deleteAll();
-    }
 
     @Test
     public void create() {

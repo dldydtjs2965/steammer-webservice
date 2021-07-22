@@ -11,7 +11,7 @@ git pull
 
 echo "> 프로젝트 빌드 시작"
 
-./gradlew build
+./gradlew build -x test
 
 echo "> webservice 디렉토리로 이동"
 

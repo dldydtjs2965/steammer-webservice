@@ -18,15 +18,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
 public class GameRepositoryTest {
 
     @Autowired
     GameRepository gameRepository;
-
-    @Before
-    public void cleanup() {
-        gameRepository.deleteAll();
-    }
 
     @Test
     public void create() {
