@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-REPOSITORY=/home/ubuntu/webservice
+REPOSITORY=/home/ec2-user/app/webservice
 PROJECT_NAME=steammer-webservice
 
 cd $REPOSITORY/$PROJECT_NAME/
