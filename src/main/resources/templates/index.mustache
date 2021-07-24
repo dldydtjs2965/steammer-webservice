@@ -116,7 +116,6 @@
                     data: { "id": userId },
                     contentType: "application/json",
                     success: function (response) {
-                        console.log(response)
                         for (let game of response) {
                             $("#"+game['gameId']).removeClass("fa-bookmark-o").addClass("fa-bookmark")
                         }
@@ -152,7 +151,6 @@
                     data: JSON.stringify(data),
                     contentType: "application/json",
                     success: function (response) {
-                        console.log(response)
                         $("#"+gameId.toString()).removeClass("fa-bookmark").addClass("fa-bookmark-o")
                     },
                     error: function (request, status, error) {
@@ -198,13 +196,12 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function (response) {
-                    console.log(response)
                     let games = response['games']
                     let html = ``
                     for (let game of games) {
                         let card = `<div class="col-xs-12 col-sm-6 col-md-4 slide-bottom" id="card">
-                                        <img class="card-img-top" src="${game['imgUrl']}" alt="Card image cap" onclick="${game['gameId']}" data-toggle="modal"
-                                data-target="#vedioModal">
+                                        <img class="card-img-top" src="${game['imgUrl']}" alt="Card image cap" onclick="getGameVideo(${game['gameId']})" data-toggle="modal"
+                     data-target="#videoModal">
                                         <div class="card-body">
                                             <i class="fa fa-bookmark-o fa-2x" aria-hidden="true" id="${game['gameId']}" onclick="bookMarkCheck(${game['gameId']})"></i>
                                             <h5 class="card-title">${game['gameName']}</h5>
@@ -261,7 +258,6 @@
                 contentType: "application/json",
                 success: function (response) {
                     let gameTags = response['gameTags']
-                    console.log(response)
                     for (let i = 0; i < gameTags.length; i++) {
                         let tagId = gameTags[i]['tag']['tagId']
                         let tagName = gameTags[i]['tag']['tagName']
@@ -283,7 +279,6 @@
                 url: "api/v1/videoResponse",
                 data: {gameId: gameId},
                 success: function (response) {
-                    console.log(response)
                     let videoTag = `<video controls width="600">
                                         <source src="${response}"
                                                     type="video/mp4">
