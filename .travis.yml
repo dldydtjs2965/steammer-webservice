@@ -25,7 +25,7 @@ deploy:
 
     secret_access_key: $AWS_SECRET_KEY
 
-    bucket: stammer-webservice-build # s3 버킷
+    bucket: steammer-webservice-build # s3 버킷
     region: ap-northeast-2
     skip_cleanup: true
     acl: private # zip파일 접근을 private
