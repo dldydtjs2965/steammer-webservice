@@ -5,11 +5,11 @@ branches:
   only:
     - master
 
-# Travis CI 서버의 HOME
+# Travis CI 서버의 Home
 cache:
   directories:
-    -'$HOME/.m2/repository'
-    -'$HOME/.gradle'
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
 
 # master 브랜치가 푸시되면 수행되는 명령어
 script: "./gradlew clean build -x test"
