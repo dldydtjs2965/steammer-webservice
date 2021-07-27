@@ -34,16 +34,17 @@ deploy:
 
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY # travis repo에 설정돤 값
+
     secret_access_key: $AWS_SECRET_KEY
+
     bucket: steammer-webservice-build #s3 버킷
     key: steammer-webservice.zip
-
     bundle_type: zip # 압축 확장자
+
     application: steammer-webservice # code deploy 어플리케이션
     deployment_group: steammer-webservice-group # code deploy 그룹
     region: ap-northeast-2
-    wait-until-deploayed: true
-
+    wait-until-deployed: true
 
 # CI 실행완료시 메일로 알람
 notifications:
