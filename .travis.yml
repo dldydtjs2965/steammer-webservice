@@ -40,7 +40,7 @@ deploy:
 
     bundle_type: zip # 압축 확장자
     application: steammer-webservice # code deploy 어플리케이션
-
+    deployment_group: steammer-webservice-group # code deploy 그룹
     region: ap-northeast-2
     wait-until-deploayed: true
 
