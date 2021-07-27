@@ -17,7 +17,7 @@ script: "./gradlew clean build -x test"
 before_deploy:
   - zip -r steammer-webservice *
   - mkdir -p deploy
-  - mv seteammer-webservice.zip deploy/steammer-webservice.zip
+  - mv steammer-webservice.zip deploy/steammer-webservice.zip
 
 deploy:
   - provider: s3
