@@ -14,6 +14,24 @@ cache:
 # master 브랜치가 푸시되면 수행되는 명령어
 script: "./gradlew clean build -x test"
 
+before_deploy:
+  - zip -r steammer-webservice *
+  - mkdir -p deploy
+  - mv seteammer-webservice.zip deploy/steammer-webservice.zip
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY # travis repo에 설정돤 값
+
+    secret_access_key: $AWS_SECRET_KEY
+
+    bucket: stammer-webservice-build # s3 버킷
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: private # zip파일 접근을 private
+    local_dir: deploy
+    wait-until-deploayed: true
+
 # CI 실행완료시 메일로 알람
 notifications:
   email:
