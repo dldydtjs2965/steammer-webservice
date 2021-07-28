@@ -15,10 +15,13 @@ cache:
 script: "./gradlew clean build -x test"
 
 before_deploy:
-  - zip -r steammer-webservice *
-  - mkdir -p deploy
-  - mv steammer-webservice.zip deploy/steammer-webservice.zip
-
+  - mkdir -p before-deploy # zip에 포함시킬 파일들을 담을 디렉토리 생성
+  - cp scripts/*.sh before-deploy/
+  - cp appspec.yml before-deploy/
+  - cp build/libs/*.jar before-deploy/
+  - cd before-deply && zip -r before-deploy/ # before-deploy에 이동 후 전체 압축
+  - cd ../ && mkdir -p deploy/
+  - mv before-deploy/before-deploy.zip deploy/steammer-webservice.zip # deploy로 zip파일 이동
 deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY # travis repo에 설정돤 값
