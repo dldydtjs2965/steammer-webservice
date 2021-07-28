@@ -1,0 +1,397 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>steammer website</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://use.fontawesome.com/1fc2219d92.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <style>
+        body {
+            background-color: #1b2838;
+        }
+
+        .container {
+            padding-left: 30px;
+            max-width: 80%;
+        }
+
+        .wrap {
+            width: 80%;
+            margin: auto;
+        }
+
+        #card {
+            background-color: #202020;
+            padding: 10px;
+            margin-bottom: 1%;
+        }
+
+
+        .card-body {
+            color: #67c1f5;
+        }
+
+        .card-title {
+            color: gray;
+        }
+
+        .tag-box {
+            float: revert;
+            text-align: center;
+        }
+
+        .card-sub-body {
+            font-size: 12px;
+            font-family: Arial;
+        }
+
+        .tag-box #game-tag {
+            margin: 3px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 80px
+        }
+
+        #dev-company, #distributor, #review, #launch-date {
+            float: left;
+        }
+
+        .header {
+            background-color: #171a21;
+            min-width: 940px;
+        }
+
+        p.card-text {
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* number of lines to show */
+            -webkit-box-orient: vertical;
+        }
+
+        video {
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        i {
+            float: right;
+        }
+    </style>
+    <script>
+        $( document ).ready(function() {
+            bookMarkView();
+        });
+
+        let page = 0;
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                appendGames()
+            }
+        });
+
+        function bookMarkView(){
+            if ($("#user").length){
+                let userId = $("#user").attr("itemid")
+                $.ajax({
+                    type: "GET",
+                    url:"api/v2/userGameList",
+                    data: { "id": userId },
+                    contentType: "application/json",
+                    success: function (response) {
+                        for (let game of response) {
+                            $("#"+game['gameId']).removeClass("fa-bookmark-o").addClass("fa-bookmark")
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                        $('html').scrollTop(0);
+                    }
+                })
+            }
+
+        }
+
+        function bookMarkCheck(gameId){
+            let element = $("#"+gameId.toString())
+            if(element.hasClass("fa-bookmark-o")){
+                addBookMark(gameId)
+            }else{
+                cancelBookMark(gameId)
+            }
+        }
+
+        function cancelBookMark(gameId) {
+            if ($("#user").length) {
+                let data = {
+                    "userId": $("#user").attr("itemid"),
+                    "gameId": gameId
+                };
+
+                $.ajax({
+                    type: "DELETE",
+                    url: "api/v2/userGameCancel",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    success: function (response) {
+                        $("#"+gameId.toString()).removeClass("fa-bookmark").addClass("fa-bookmark-o")
+                    },
+                    error: function (request, status, error) {
+                        alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                        $('html').scrollTop(0);
+                    }
+                })
+            }
+        }
+
+        function addBookMark(gameId) {
+            if ($("#user").length) {
+                let data = {
+                    "userId": $("#user").attr("itemid"),
+                    "gameId": gameId
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "api/v2/userGameSave",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    success: function (response) {
+                        $("#"+gameId.toString()).removeClass("fa-bookmark-o").addClass("fa-bookmark")
+                    },
+                    error: function (request, status, error) {
+                        alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                        $('html').scrollTop(0);
+                    }
+                });
+            } else {
+                alert("로그인 후 이용가능한 서비스 입니다.")
+            }
+        }
+
+        function appendGames() {
+            page++
+            let size = 9
+            $.ajax({
+                type: "POST",
+                url: '/api/v1/appendGames',
+                data: JSON.stringify({"page": page, "size": size}),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (response) {
+                    let games = response['games']
+                    let html = ``
+                    for (let game of games) {
+                        let card = `<div class="col-xs-12 col-sm-6 col-md-4 slide-bottom" id="card">
+                                        <img class="card-img-top" src="${game['imgUrl']}" alt="Card image cap" onclick="getGameVideo(${game['gameId']})" data-toggle="modal"
+                     data-target="#videoModal">
+                                        <div class="card-body">
+                                            <i class="fa fa-bookmark-o fa-2x" aria-hidden="true" id="${game['gameId']}" onclick="bookMarkCheck(${game['gameId']})"></i>
+                                            <h5 class="card-title">${game['gameName']}</h5>
+                                            <p class="card-text">${game['gameInfo']}.</p>
+                                            <div class="card-sub-body">
+                                                <div class="summary column" id="launch-date">출시날짜:</div>
+                                                <div class="summary column">
+                                                    <span class="game_review_summary mixed" style="margin-left: 20px">${game['launchDate']}</span>
+                                                </div>
+                                                <div class="subtitle column all" id="review">모든 평가:</div>
+                                                <div class="summary column">
+                                                    <span class="game_review_summary mixed" style="margin-left: 20px">${game['evaluation']}</span>
+                                                </div>
+                                                <div class="dev_row">
+                                                    <div class="subtitle column" id="dev-company">개발자:</div>
+                                                    <span class="column" id="developers_list"
+                                                          style="margin-left: 20px">${game['devCompany']}</span>
+                                                    <div class="dev_row">
+                                                        <div class="subtitle column" id="distributor">배급사:</div>
+                                                        <span class="column" style="margin-left: 20px">${game['distributor']}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tag-box">`
+                        for (let tag of game['gameTags']) {
+                            tag = `<a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag"
+                                    itemid="${tag['tagId']}">${tag['tagName']}</a>`
+                            card += tag
+                        }
+                        html = card + `<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                                    data-target="#tagModal" onclick="getGameTag(${game['gameId']})">
+                                                +
+                                        </button>
+                                    </div>
+                                </div>`
+                        $('.row').append(html)
+                    }
+                },
+                error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                    $('html').scrollTop(0);
+                }
+            });
+        }
+
+        function getGameTag(gameId) {
+            $("#game-tag-list").empty()
+            $.ajax({
+                type: "POST",
+                url: "/api/v1/gameTagResponse",
+                data: JSON.stringify(gameId),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (response) {
+                    let gameTags = response['gameTags']
+                    for (let i = 0; i < gameTags.length; i++) {
+                        let tagId = gameTags[i]['tag']['tagId']
+                        let tagName = gameTags[i]['tag']['tagName']
+
+                        let html = `<li class="list-group-item" itemid="${tagId}">${tagName}</li>`
+                        $("#game-tag-list").append(html);
+                    }
+                },
+                error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            })
+        }
+
+        function getGameVideo(gameId) {
+            $('#videoModal .modal-body').empty();
+            $.ajax({
+                type: "GET",
+                url: "api/v1/videoResponse",
+                data: {gameId: gameId},
+                success: function (response) {
+                    let videoTag = `<video controls width="600">
+                                        <source src="${response}"
+                                                    type="video/mp4">
+                                    </video>`
+                    $('#videoModal .modal-body').append(videoTag);
+                },
+                error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<div class="header">
+    <h1>steam</h1>
+    {{#steammerUserName}}
+        Logged in as: <span id="user" itemid="{{steammerUserId}}">{{steammerUserName}}</span>
+        <a href="/logout" class="btn btn-info active" role="button">Logout</a>
+    {{/steammerUserName}}
+    {{^steammerUserName}}
+        <a href="/oauth2/authorization/google" class="btn btn-secondary active" role="button">Google Login</a>
+
+        <a href="/oauth2/authorization/naver" class="btn btn-success active" role="button">Naver Login</a>
+    {{/steammerUserName}}
+    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+            data-target="#tagModal" onclick="testUserGame()">
+        +
+    </button>
+</div>
+<div class="wrap">
+    <div class="row">
+        {{#games}}
+            <div class="col-xs-12 col-sm-6 col-md-4 slide-bottom" id="card">
+                <img class="card-img-top" src="{{imgUrl}}" alt="Card image cap" onclick="getGameVideo({{gameId}})"
+                     data-toggle="modal"
+                     data-target="#videoModal">
+                <div class="card-body">
+                    <i class="fa fa-bookmark-o fa-2x" aria-hidden="true" id="{{gameId}}"
+                       onclick="bookMarkCheck({{gameId}})"></i>
+                    <h5 class="card-title">{{gameName}}</h5>
+                    <p class="card-text">{{gameInfo}}.</p>
+                    <div class="card-sub-body">
+                        <div class="summary column" id="launch-date">출시날짜:</div>
+                        <div class="summary column">
+                            <span class="game_review_summary mixed" style="margin-left: 20px">{{launchDate}}</span>
+                        </div>
+                        <div class="subtitle column all" id="review">모든 평가:</div>
+                        <div class="summary column">
+                            <span class="game_review_summary mixed" style="margin-left: 20px">{{evaluation}}</span>
+                        </div>
+                        <div class="dev_row">
+                            <div class="subtitle column" id="dev-company">개발자:</div>
+                            <span class="column" id="developers_list"
+                                  style="margin-left: 20px">{{devCompany}}</span>
+                            <div class="dev_row">
+                                <div class="subtitle column" id="distributor">배급사:</div>
+                                <span class="column" style="margin-left: 20px">{{distributor}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tag-box">
+                    {{#gameTags}}
+                        <a class="btn btn-secondary btn-sm" href="#" role="button" id="game-tag"
+                           itemid="{{tagId}}">{{tagName}}</a>
+                    {{/gameTags}}
+                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                            data-target="#tagModal" onclick="getGameTag({{gameId}})">
+                        +
+                    </button>
+                </div>
+            </div>
+        {{/games}}
+    </div>
+</div>
+</div>
+<!-- tag Modal -->
+<div class="modal fade" id="tagModal" tabindex="-1" role="dialog" aria-labelledby="tagModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tagModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group" id="game-tag-list">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- video odal -->
+<div class="modal fade bd-example-modal-lg" id="videoModal" tabindex="-1" role="dialog"
+     aria-labelledby="videoModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="videoModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
