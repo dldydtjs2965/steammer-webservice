@@ -23,9 +23,8 @@
             background-color: #1b2838;
         }
 
-        .container {
-            padding-left: 30px;
-            max-width: 80%;
+        .title{
+            color: lightgray;
         }
 
         .wrap {
@@ -92,6 +91,18 @@
 
         i {
             float: right;
+        }
+
+        #user{
+            color: lightgray;
+        }
+
+        #game-img{
+            cursor:pointer;
+        }
+
+        .fa{
+            cursor: pointer;
         }
     </style>
     <script>
@@ -200,7 +211,7 @@
                     let html = ``
                     for (let game of games) {
                         let card = `<div class="col-xs-12 col-sm-6 col-md-4 slide-bottom" id="card">
-                                        <img class="card-img-top" src="${game['imgUrl']}" alt="Card image cap" onclick="getGameVideo(${game['gameId']})" data-toggle="modal"
+                                        <img class="card-img-top" id="game-img" src="${game['imgUrl']}" alt="Card image cap" onclick="getGameVideo(${game['gameId']})" data-toggle="modal"
                      data-target="#videoModal">
                                         <div class="card-body">
                                             <i class="fa fa-bookmark-o fa-2x" aria-hidden="true" id="${game['gameId']}" onclick="bookMarkCheck(${game['gameId']})"></i>
@@ -294,7 +305,7 @@
 </head>
 <body>
 <div class="header">
-    <h1>steam</h1>
+    <h1 class="title">steammer</h1>
     {{#steammerUserName}}
         Logged in as: <span id="user" itemid="{{steammerUserId}}">{{steammerUserName}}</span>
         <a href="/logout" class="btn btn-info active" role="button">Logout</a>
@@ -304,16 +315,12 @@
 
         <a href="/oauth2/authorization/naver" class="btn btn-success active" role="button">Naver Login</a>
     {{/steammerUserName}}
-    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-            data-target="#tagModal" onclick="testUserGame()">
-        +
-    </button>
 </div>
 <div class="wrap">
     <div class="row">
         {{#games}}
             <div class="col-xs-12 col-sm-6 col-md-4 slide-bottom" id="card">
-                <img class="card-img-top" src="{{imgUrl}}" alt="Card image cap" onclick="getGameVideo({{gameId}})"
+                <img class="card-img-top" id="game-img" src="{{imgUrl}}" alt="Card image cap" onclick="getGameVideo({{gameId}})"
                      data-toggle="modal"
                      data-target="#videoModal">
                 <div class="card-body">
