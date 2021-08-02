@@ -1,7 +1,7 @@
 package com.steammer.config.auth;
 
-import com.steammer.domain.User.Role;
-import com.steammer.domain.User.User;
+import com.steammer.domain.user.Role;
+import com.steammer.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 

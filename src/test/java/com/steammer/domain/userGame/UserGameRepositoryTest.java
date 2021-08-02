@@ -1,11 +1,9 @@
 package com.steammer.domain.userGame;
 
-import com.steammer.domain.User.User;
-import com.steammer.domain.User.UserRepository;
-import com.steammer.domain.gameTag.GameTag;
+import com.steammer.domain.user.User;
+import com.steammer.domain.user.UserRepository;
 import com.steammer.domain.games.Game;
 import com.steammer.domain.games.GameRepository;
-import com.steammer.domain.tags.Tag;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

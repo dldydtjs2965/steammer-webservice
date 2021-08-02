@@ -26,8 +26,20 @@ public class IndexController {
         if (user != null){
             model.addAttribute("steammerUserName", user.getName());
             model.addAttribute("steammerUserId",userService.findByUserId(user.getEmail()));
-            System.out.println("userName"+user.getName());
         }
         return "index";
+    }
+
+    @GetMapping("/myGames")
+    public String myGame(Model model, @LoginUser SessionUser user){
+        Long userId = userService.findByUserId(user.getEmail());
+
+        model.addAttribute("games", userService.findUserWishGame(userId));
+
+        if (user != null){
+            model.addAttribute("steammerUserName", user.getName());
+            model.addAttribute("steammerUserId",userService.findByUserId(user.getEmail()));
+        }
+        return "myGamePage";
     }
 }

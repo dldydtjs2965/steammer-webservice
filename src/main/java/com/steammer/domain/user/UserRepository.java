@@ -1,4 +1,4 @@
-package com.steammer.domain.User;
+package com.steammer.domain.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

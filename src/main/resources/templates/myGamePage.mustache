@@ -307,8 +307,7 @@
 <div class="header">
     <h1 class="title">steammer</h1>
     {{#steammerUserName}}
-        <span id="user" itemid="{{steammerUserId}}">Logged in as: {{steammerUserName}}</span>
-        <a href="/myGames" class="btn btn-success active" role="button">My Game</a>
+        Logged in as: <span id="user" itemid="{{steammerUserId}}">{{steammerUserName}}</span>
         <a href="/logout" class="btn btn-info active" role="button">Logout</a>
     {{/steammerUserName}}
     {{^steammerUserName}}

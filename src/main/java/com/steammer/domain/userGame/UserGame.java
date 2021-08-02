@@ -1,6 +1,6 @@
 package com.steammer.domain.userGame;
 
-import com.steammer.domain.User.User;
+import com.steammer.domain.user.User;
 import com.steammer.domain.games.Game;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,12 +1,10 @@
 package com.steammer.web;
 
-import com.steammer.config.auth.LoginUser;
-import com.steammer.config.auth.dto.SessionUser;
-import com.steammer.domain.User.User;
+import com.steammer.domain.user.User;
 import com.steammer.domain.games.Game;
 import com.steammer.service.GamesService;
 import com.steammer.service.UserService;
-import com.steammer.web.dto.UserGameResponseDto;
+import com.steammer.web.dto.UserGameIdResponseDto;
 import com.steammer.web.dto.UserGameSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +21,8 @@ public class UserApiController {
     private final GamesService gamesService;
 
     @GetMapping("api/v2/userGameList")
-    public List<UserGameResponseDto> userGameResponseDto(@RequestParam Long id){
-        return userService.findUserGame(id);
+    public List<UserGameIdResponseDto> userGameIdResponseDto(@RequestParam Long id){
+        return userService.findUserGameId(id);
     }
 
     @PostMapping("api/v2/userGameSave")

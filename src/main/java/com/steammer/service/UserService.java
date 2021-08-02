@@ -1,13 +1,11 @@
 package com.steammer.service;
 
-import com.steammer.config.auth.dto.SessionUser;
-import com.steammer.domain.User.User;
-import com.steammer.domain.User.UserRepository;
-import com.steammer.domain.games.Game;
+import com.steammer.domain.user.User;
+import com.steammer.domain.user.UserRepository;
 import com.steammer.domain.games.GameRepository;
-import com.steammer.domain.userGame.UserGame;
 import com.steammer.domain.userGame.UserGameRepository;
-import com.steammer.web.dto.UserGameResponseDto;
+import com.steammer.web.dto.LimitTagGameResponseDto;
+import com.steammer.web.dto.UserGameIdResponseDto;
 import com.steammer.web.dto.UserGameSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -59,10 +57,16 @@ public class UserService {
     }
     
     @Transactional
-    public List<UserGameResponseDto> findUserGame(Long id){
-        return userGameRepository.findAllByUserHaveGame(id).stream()
-                .map(UserGameResponseDto::new)
+    public List<UserGameIdResponseDto> findUserGameId(Long id){
+        return userGameRepository.findAllByUserGame(id).stream()
+                .map(UserGameIdResponseDto::new)
                 .collect(Collectors.toList());
+    }
 
+    @Transactional
+    public List<LimitTagGameResponseDto> findUserWishGame(Long id){
+        return userGameRepository.findAllByUserWishGame(id).stream()
+                .map(LimitTagGameResponseDto::new)
+                .collect(Collectors.toList());
     }
 }

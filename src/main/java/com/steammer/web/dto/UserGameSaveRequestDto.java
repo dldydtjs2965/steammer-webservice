@@ -1,6 +1,6 @@
 package com.steammer.web.dto;
 
-import com.steammer.domain.User.User;
+import com.steammer.domain.user.User;
 import com.steammer.domain.games.Game;
 import com.steammer.domain.userGame.UserGame;
 import lombok.Builder;

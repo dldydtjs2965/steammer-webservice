@@ -1,6 +1,6 @@
 package com.steammer.config.auth;
 
-import com.steammer.domain.User.Role;
+import com.steammer.domain.user.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,7 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable().disable()
                 .authorizeRequests() //URL 별 권한 관리 옵션
                 .antMatchers("/","/css/**","/images/**","/js/**","/api/v1/**").permitAll() // 모든 사용자
-                .antMatchers("/api/v2/**").hasRole(Role.USER.name()) // 유저 들만
+                .antMatchers("/api/v2/**","/myGames").hasRole(Role.USER.name()) // 유저 들만
                 .anyRequest().authenticated() //설정값 이외의 URL
         .and()
                 .logout()

@@ -1,11 +1,11 @@
 package com.steammer.service;
 
-import com.steammer.domain.User.User;
-import com.steammer.domain.User.UserRepository;
+import com.steammer.domain.user.User;
+import com.steammer.domain.user.UserRepository;
 import com.steammer.domain.games.Game;
 import com.steammer.domain.games.GameRepository;
 import com.steammer.domain.userGame.UserGameRepository;
-import com.steammer.web.dto.UserGameResponseDto;
+import com.steammer.web.dto.UserGameIdResponseDto;
 import com.steammer.web.dto.UserGameSaveRequestDto;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -83,7 +82,7 @@ public class UserServiceTest extends TestCase {
                 .build();
         userService.save(requestDto);
         //when
-        List<UserGameResponseDto> responseDtos = userService.findUserGame(1L);
+        List<UserGameIdResponseDto> responseDtos = userService.findUserGameId(1L);
 
         //then
         assertThat(responseDtos.get(0).getGameId()).isEqualTo(977950L);

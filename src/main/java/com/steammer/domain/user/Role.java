@@ -1,4 +1,4 @@
-package com.steammer.domain.User;
+package com.steammer.domain.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

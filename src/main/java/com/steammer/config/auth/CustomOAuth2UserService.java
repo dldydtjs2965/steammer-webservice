@@ -1,8 +1,8 @@
 package com.steammer.config.auth;
 
 import com.steammer.config.auth.dto.SessionUser;
-import com.steammer.domain.User.User;
-import com.steammer.domain.User.UserRepository;
+import com.steammer.domain.user.User;
+import com.steammer.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

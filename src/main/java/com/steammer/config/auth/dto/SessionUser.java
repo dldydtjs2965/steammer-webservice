@@ -1,6 +1,6 @@
 package com.steammer.config.auth.dto;
 
-import com.steammer.domain.User.User;
+import com.steammer.domain.user.User;
 import lombok.Getter;
 
 import java.io.Serializable;

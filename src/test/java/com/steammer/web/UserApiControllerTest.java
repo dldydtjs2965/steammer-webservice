@@ -1,17 +1,13 @@
 package com.steammer.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.steammer.config.auth.LoginUser;
-import com.steammer.config.auth.dto.SessionUser;
-import com.steammer.domain.User.User;
-import com.steammer.domain.User.UserRepository;
+import com.steammer.domain.user.User;
+import com.steammer.domain.user.UserRepository;
 import com.steammer.domain.games.Game;
 import com.steammer.domain.games.GameRepository;
 import com.steammer.domain.userGame.UserGame;
 import com.steammer.domain.userGame.UserGameRepository;
 import com.steammer.web.dto.UserGameSaveRequestDto;
 import junit.framework.TestCase;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
