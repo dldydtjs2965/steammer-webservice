@@ -26,16 +26,18 @@ public class UserService {
 
     private final GameRepository gameRepository;
 
+    //게임 북마크 저장
     @Transactional
     public Long save(UserGameSaveRequestDto requestDto){
         return userGameRepository.save(requestDto.toEntity()).getUserGameKey();
     }
-
+    //게임 북마크 취소
     @Transactional
     public void cancelGame(Long userId, Long gameId){
         userGameRepository.deleteById(gameId+userId);
     }
 
+    //유저 검색후 return
     @Transactional
     public User findByUser(Long id){
         Optional<User> user =  userRepository.findById(id);
@@ -46,6 +48,7 @@ public class UserService {
         }
     }
 
+    //email 받아서 유저 id return
     @Transactional
     public Long findByUserId(String email){
         Optional<User> user =  userRepository.findByEmail(email);
@@ -55,7 +58,8 @@ public class UserService {
             return user.get().getId();
         }
     }
-    
+
+    //User가 북마크한 게임 id들 return
     @Transactional
     public List<UserGameIdResponseDto> findUserGameId(Long id){
         return userGameRepository.findAllByUserGame(id).stream()
@@ -63,6 +67,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    //유저가 북마크한 게임 리스트 return
     @Transactional
     public List<LimitTagGameResponseDto> findUserWishGame(Long id){
         return userGameRepository.findAllByUserWishGame(id).stream()

@@ -18,21 +18,21 @@ import java.util.Map;
 @RestController
 public class GameApiController {
     private final GamesService gamesService;
-
+    //스크롤된 다음 게임 리스트 return
     @PostMapping("api/v1/appendGames")
     public Map<String,List<LimitTagGameResponseDto>> gamesReResponse (@RequestBody Map<String,Integer> request){
         HashMap<String,List<LimitTagGameResponseDto>> map = new HashMap<>();
         map.put("games",gamesService.findAllPaging(request.get("page"), request.get("size")));
         return map;
     }
-
+    //한 게임의 모든 태그 조회
     @PostMapping("api/v1/gameTagResponse")
     public Map<String,List<GameTagResponseDto>> gameTagResponseDtoList(@RequestBody Long gameId) {
         HashMap<String,List<GameTagResponseDto>> map = new HashMap<String,List<GameTagResponseDto>>();
         map.put("gameTags",gamesService.findGameTags(gameId));
         return map;
     }
-
+    //게임 PV영상 조회
     @GetMapping("api/v1/videoResponse")
     public String gameVideoUrlResponse(@RequestParam Long gameId) {
         return gamesService.findVideoUrl(gameId);
