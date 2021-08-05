@@ -3,7 +3,7 @@
 스팀 웹페이지에서 크롤링한 데이터를 심플한 웹페이지 형태로 보여주는 웹 서비스.
 
 # 사용기술
-Spring Boot, Mustache, MySql, hibernate, spring security, travis
+Spring Boot, Mustache, MySql, hibernate, spring security, travis, spring data jpa
 
 
 # features
