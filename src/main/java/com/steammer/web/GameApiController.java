@@ -1,12 +1,8 @@
 package com.steammer.web;
 
-import com.steammer.config.auth.LoginUser;
-import com.steammer.config.auth.dto.SessionUser;
 import com.steammer.service.GamesService;
-import com.steammer.service.UserService;
 import com.steammer.web.dto.LimitTagGameResponseDto;
 import com.steammer.web.dto.GameTagResponseDto;
-import com.steammer.web.dto.UserGameSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
