@@ -22,6 +22,7 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model, @LoginUser SessionUser user){
         model.addAttribute("games", gamesService.findAllPaging(0,9));
+        System.out.println("---------------------디비 확인--------------------------------");
         //유저 로그인 확인
         if (user != null){
             model.addAttribute("steammerUserName", user.getName());
