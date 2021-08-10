@@ -120,11 +120,9 @@
 
         function bookMarkView(){
             if ($("#user").length){
-                let userId = $("#user").attr("itemid")
                 $.ajax({
                     type: "GET",
                     url:"api/v2/userGameList",
-                    data: { "id": userId },
                     contentType: "application/json",
                     success: function (response) {
                         for (let game of response) {
@@ -151,15 +149,10 @@
 
         function cancelBookMark(gameId) {
             if ($("#user").length) {
-                let data = {
-                    "userId": $("#user").attr("itemid"),
-                    "gameId": gameId
-                };
-
                 $.ajax({
                     type: "DELETE",
                     url: "api/v2/userGameCancel",
-                    data: JSON.stringify(data),
+                    data:  JSON.stringify(gameId),
                     contentType: "application/json",
                     success: function (response) {
                         $("#"+gameId.toString()).removeClass("fa-bookmark").addClass("fa-bookmark-o")
@@ -174,15 +167,10 @@
 
         function addBookMark(gameId) {
             if ($("#user").length) {
-                let data = {
-                    "userId": $("#user").attr("itemid"),
-                    "gameId": gameId
-                };
-
                 $.ajax({
                     type: "POST",
                     url: "api/v2/userGameSave",
-                    data: JSON.stringify(data),
+                    data:  JSON.stringify(gameId),
                     contentType: "application/json",
                     success: function (response) {
                         $("#"+gameId.toString()).removeClass("fa-bookmark-o").addClass("fa-bookmark")
@@ -307,7 +295,7 @@
 <div class="header">
     <h1 class="title">steammer</h1>
     {{#steammerUserName}}
-        <span id="user" itemid="{{steammerUserId}}">Logged in as: {{steammerUserName}}</span>
+        <span id="user">Logged in as: {{steammerUserName}}</span>
         <a href="/myGames" class="btn btn-success active" role="button">My Game</a>
         <a href="/logout" class="btn btn-info active" role="button">Logout</a>
     {{/steammerUserName}}

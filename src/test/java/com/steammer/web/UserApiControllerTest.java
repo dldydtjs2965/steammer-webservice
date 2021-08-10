@@ -1,13 +1,18 @@
 package com.steammer.web;
 
+import com.steammer.config.auth.dto.SessionUser;
+import com.steammer.domain.user.Role;
 import com.steammer.domain.user.User;
 import com.steammer.domain.user.UserRepository;
 import com.steammer.domain.games.Game;
 import com.steammer.domain.games.GameRepository;
 import com.steammer.domain.userGame.UserGame;
 import com.steammer.domain.userGame.UserGameRepository;
+import com.steammer.service.UserService;
 import com.steammer.web.dto.UserGameSaveRequestDto;
 import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +20,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
@@ -23,10 +33,12 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
 public class UserApiControllerTest extends TestCase {
     @Autowired
     private TestRestTemplate restTemplate;
@@ -38,56 +50,87 @@ public class UserApiControllerTest extends TestCase {
     private UserRepository userRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private UserGameRepository userGameRepository;
+
+    @Autowired
+    private WebApplicationContext context;
+
+    protected MockHttpSession session;
+
+    private SessionUser sessionUser;
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void setup() {
+        User user = userRepository.findByEmail("test@gmail.com").get();
+
+        userRepository.save(user);
+
+        sessionUser = new SessionUser(user);
+
+        session = new MockHttpSession();
+
+        session.setAttribute("user", sessionUser);
+    }
+
+    @After // 2
+    public void clean(){
+        session.clearAttributes();
+    }
 
     @LocalServerPort
     private int port;
 
 
     @Test
-    public void testUserGameSave() {
+    @WithMockUser(roles = "USER")
+    public void testUserGameSave() throws Exception {
         String url = "http://localhost:"+port+"/api/v2/userGameSave";
 
         // given
         Game game = gameRepository.findById(977950L).get();
-        User user = userRepository.findById(1L).get();
-        UserGameSaveRequestDto requestDto = UserGameSaveRequestDto.builder()
-                .user(user)
-                .game(game)
-                .build();
-        //when
-        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
+        Long request = game.getGameId();
+
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        String content = request.toString();
+
+        // when
+        mockMvc.perform(post(url)
+                        .session(session) // 추가
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
         //then
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        List<UserGame> all = userGameRepository.findAll();
-        assertThat(all.get(0).getGame()).isEqualTo(game);
-        assertThat(all.get(0).getUser()).isEqualTo(user);
+        List<Game> all = userGameRepository.findAllByUserWishGame(userService.findByUserId(sessionUser.getEmail()));
+        assertThat(all.get(0).getGameId()).isEqualTo(game.getGameId());
     }
 
     @Test
-    public void testUserGameCancel() {
+    public void testUserGameCancel() throws Exception{
         String url = "http://localhost:"+port+"/api/v2/userGameCancel";
 
         // given
         Game game = gameRepository.findById(977950L).get();
-        User user = userRepository.findById(1L).get();
-        UserGame userGame = UserGame.builder()
-                .user(user)
-                .game(game)
-                .build();
+        Long request = game.getGameId();
 
-        userGameRepository.save(userGame);
-        //when
-        Map<String,Long> request = new HashMap<>();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        String content = request.toString();
 
-        request.put("gameId", 977950L);
+        // when
+        mockMvc.perform(delete(url)
+                        .session(session) // 추가
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
 
-        HttpHeaders headers = new HttpHeaders();
-        HttpEntity<Map<String,Long>> entity = new HttpEntity<>(request,headers);
-
-        //when
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE,entity,String.class);
         //then
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Boolean result = userGameRepository.findAllByUserWishGame(userService.findByUserId(sessionUser.getEmail())).isEmpty();
+        assertThat(result).isEqualTo(true);
     }
 }

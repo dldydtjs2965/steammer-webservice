@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,9 +33,9 @@ public class UserApiController {
 
     //유저 북마크 저장
     @PostMapping("api/v2/userGameSave")
-    public Long userGameSave(@RequestBody Map<String,Long> request, @LoginUser SessionUser loginUser){
+    public Long userGameSave(@RequestBody Long gameId, @LoginUser SessionUser loginUser){
         //저장할 게임
-        Game game = gamesService.findByGame(request.get("gameId"));
+        Game game = gamesService.findByGame(gameId);
         //요청한 유저
         Long userId = userService.findByUserId(loginUser.getEmail());
         User user = userService.findByUser(userId);
@@ -50,10 +49,10 @@ public class UserApiController {
     }
     // 북마크 취소
     @DeleteMapping("api/v2/userGameCancel")
-    public void userGameCancel(@RequestBody Map<String,Long> request, @LoginUser SessionUser loginUser) {
+    public void userGameCancel(@RequestBody Long gameId, @LoginUser SessionUser loginUser) {
         //요청한 유저
         Long userId = userService.findByUserId(loginUser.getEmail());
 
-        userService.cancelGame(userId, request.get("gameId"));
+        userService.cancelGame(userId, gameId);
     }
 }

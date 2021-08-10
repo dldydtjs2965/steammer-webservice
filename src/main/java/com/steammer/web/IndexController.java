@@ -26,7 +26,6 @@ public class IndexController {
         //유저 로그인 확인
         if (user != null){
             model.addAttribute("steammerUserName", user.getName());
-            model.addAttribute("steammerUserId",userService.findByUserId(user.getEmail()));
         }
         return "index";
     }
@@ -39,7 +38,6 @@ public class IndexController {
         //유저 로그인 확인
         if (user != null){
             model.addAttribute("steammerUserName", user.getName());
-            model.addAttribute("steammerUserId",userService.findByUserId(user.getEmail()));
         }
         return "myGamePage";
     }

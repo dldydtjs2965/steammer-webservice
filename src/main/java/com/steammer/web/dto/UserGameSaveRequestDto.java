@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserGameSaveRequestDto {
     private Game game;
-
     private User user;
 
     @Builder
