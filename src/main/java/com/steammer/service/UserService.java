@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -52,7 +53,7 @@ public class UserService {
     @Transactional
     public Long findByUserId(String email){
         Optional<User> user =  userRepository.findByEmail(email);
-        if(user == null){
+        if(user == null && emailCheck(email)){
             throw new UsernameNotFoundException(email);
         }else{
             return user.get().getId();
@@ -73,5 +74,11 @@ public class UserService {
         return userGameRepository.findAllByUserWishGame(id).stream()
                 .map(LimitTagGameResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    private boolean emailCheck(String email){
+        String EmailPattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
+        if(Pattern.matches(EmailPattern, email)) return true;
+        return false;
     }
 }
