@@ -23,10 +23,8 @@ public class GameApiController {
     }
     //한 게임의 모든 태그 조회
     @PostMapping("api/v1/gameTagResponse")
-    public Map<String,List<GameTagResponseDto>> gameTagResponseDtoList(@RequestBody Long gameId) {
-        HashMap<String,List<GameTagResponseDto>> map = new HashMap<String,List<GameTagResponseDto>>();
-        map.put("gameTags",gamesService.findGameTags(gameId));
-        return map;
+    public List<GameTagResponseDto> gameTagResponseDtoList(@RequestBody Long gameId) {
+        return gamesService.findGameTags(gameId);
     }
     //게임 PV영상 조회
     @GetMapping("api/v1/videoResponse")

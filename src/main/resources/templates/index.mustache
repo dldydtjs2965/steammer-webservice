@@ -256,7 +256,7 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function (response) {
-                    let gameTags = response['gameTags']
+                    let gameTags = response
                     for (let i = 0; i < gameTags.length; i++) {
                         let tagId = gameTags[i]['tag']['tagId']
                         let tagName = gameTags[i]['tag']['tagName']
