@@ -22,8 +22,8 @@ public class GameApiController {
         return map;
     }
     //한 게임의 모든 태그 조회
-    @PostMapping("api/v1/gameTagResponse")
-    public List<GameTagResponseDto> gameTagResponseDtoList(@RequestBody Long gameId) {
+    @GetMapping("api/v1/gameTagResponse")
+    public List<GameTagResponseDto> gameTagResponseDtoList(@RequestParam Long gameId) {
         return gamesService.findGameTags(gameId);
     }
     //게임 PV영상 조회

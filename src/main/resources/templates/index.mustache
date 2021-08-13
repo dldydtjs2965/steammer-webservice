@@ -250,9 +250,9 @@
         function getGameTag(gameId) {
             $("#game-tag-list").empty()
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: "/api/v1/gameTagResponse",
-                data: JSON.stringify(gameId),
+                data: {gameId: gameId},
                 dataType: "json",
                 contentType: "application/json",
                 success: function (response) {

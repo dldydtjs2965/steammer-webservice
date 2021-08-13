@@ -2,6 +2,7 @@ package com.steammer.web;
 
 import com.steammer.domain.gameTag.GameTag;
 import com.steammer.domain.games.GameRepository;
+import com.steammer.web.dto.GameTagResponseDto;
 import junit.framework.TestCase;
 import net.minidev.json.JSONObject;
 import org.junit.Test;
@@ -10,15 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -61,16 +65,16 @@ public class GamesApiControllerTest extends TestCase {
         //given
         Long gameId = Long.valueOf(1016920);
 
-        String url = "http://localhost:"+port+"/api/gameTagResponse";
+        String url = "http://localhost:"+port+"/api/v1/gameTagResponse?gameId=";
 
         List<GameTag> gameTags = gameRepository.findById(gameId).get().getGameTags();
         //when
-        ResponseEntity<JSONObject> responseEntity = restTemplate.postForEntity(url,gameId,JSONObject.class);
-
+        ResponseEntity<JSONObject[]> responseEntity = restTemplate.getForEntity(url+gameId.toString(), JSONObject[].class);
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        for (GameTag gameTag : gameTags) {
-            assertThat(responseEntity.getBody().toJSONString()).contains(gameTag.getTag().getTagName());
+
+        for (int i = 0; i<gameTags.size(); i++) {
+            assertThat(responseEntity.getBody()[i].toJSONString()).contains(gameTags.get(i).getTag().getTagName());
         }
     }
 
