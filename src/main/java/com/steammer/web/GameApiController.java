@@ -16,10 +16,8 @@ public class GameApiController {
     private final GamesService gamesService;
     //스크롤된 다음 게임 리스트 return
     @PostMapping("api/v1/appendGames")
-    public Map<String,List<LimitTagGameResponseDto>> gamesReResponse (@RequestBody Map<String,Integer> request){
-        HashMap<String,List<LimitTagGameResponseDto>> map = new HashMap<>();
-        map.put("games",gamesService.findAllPaging(request.get("page"), request.get("size")));
-        return map;
+    public List<LimitTagGameResponseDto> gamesReResponse (@RequestBody Map<String,Integer> request){
+        return gamesService.findAllPaging(request.get("page"), request.get("size"));
     }
     //한 게임의 모든 태그 조회
     @GetMapping("api/v1/gameTagResponse")

@@ -16,9 +16,8 @@ function appendGames() {
         dataType: "json",
         contentType: "application/json",
         success: function (response) {
-            let games = response['games']
             let html = ``
-            for (let game of games) {
+            for (let game of response) {
                 let card = `<div class="col-xs-12 col-sm-6 col-md-4 slide-bottom" id="card">
                                         <img class="card-img-top" id="game-img" src="${game['imgUrl']}" alt="Card image cap" onclick="getGameVideo(${game['gameId']})" data-toggle="modal"
                      data-target="#videoModal">

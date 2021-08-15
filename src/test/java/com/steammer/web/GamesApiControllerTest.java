@@ -49,15 +49,15 @@ public class GamesApiControllerTest extends TestCase {
         Map<String,Integer> request = new HashMap<>();
         request.put("page", 0);
         request.put("size", 9);
-
         String url = "http://localhost:"+port+"/api/v1/appendGames";
 
         //when
-        ResponseEntity<JSONObject> responseEntity = restTemplate.postForEntity(url, request, JSONObject.class);
+        ResponseEntity<JSONObject[]> responseEntity = restTemplate.postForEntity(url, request, JSONObject[].class);
 
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody().toJSONString()).contains("games");
+
+        assertThat(responseEntity.getBody().length).isEqualTo(9);
     }
 
     @Test
